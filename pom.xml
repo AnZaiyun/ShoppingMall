@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.anzaiyun.shoppingmall</groupId>
+    <artifactId>shoppingmall</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>shoppingmall</name>
+    <description>谷粒商城聚合服务</description>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>shoppingmall-coupon</module>
+        <module>shoppingmall-member</module>
+        <module>shoppingmall-order</module>
+        <module>shoppingmall-product</module>
+        <module>shoppingmall-ware</module>
+    </modules>
+
+
+</project>

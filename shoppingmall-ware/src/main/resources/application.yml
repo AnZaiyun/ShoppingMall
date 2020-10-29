@@ -1,15 +1,26 @@
 server:
-  port: 11000
+  port: 15000
 
 spring:
+  application:
+    name: shoppingmall-ware
   datasource:
     username: root
     password: root
     url: jdbc:mysql://192.168.56.10:3306/shoppingmall_wms?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
     driver-class-name: com.mysql.jdbc.Driver
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
 
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*.xml
   global-config:
     db-config:
       id-type: auto
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

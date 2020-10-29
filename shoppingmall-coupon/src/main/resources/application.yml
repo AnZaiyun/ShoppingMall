@@ -1,5 +1,5 @@
 server:
-  port: 7000
+  port: 11000
 
 spring:
   # 必须要设置，不设置nacos服务会注册不成功

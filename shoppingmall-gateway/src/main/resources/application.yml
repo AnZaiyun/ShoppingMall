@@ -1,0 +1,22 @@
+server:
+  port: 88
+
+spring:
+  application:
+    name: shoppingmall-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+    gateway:
+      routes:
+        - id: test1
+          uri: https://www.baidu.com
+          predicates:
+            - Query=url,baidu
+        - id: test2
+          uri: https://blog.csdn.net/
+          predicates:
+            - Query=url,csdn
+
+

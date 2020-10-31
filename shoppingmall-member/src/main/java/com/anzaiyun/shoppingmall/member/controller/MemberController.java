@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.anzaiyun.shoppingmall.member.feign.coupon.CouponFeignService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +32,8 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
+    @Autowired
+    private CouponFeignService couponFeignService;
     /**
      * 列表
      */
@@ -85,6 +88,16 @@ public class MemberController {
 		memberService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
+    }
+
+    @RequestMapping("/membercouponslist")
+    public R test(){
+        MemberEntity memberEntity = new MemberEntity();
+        memberEntity.setNickname("泰妍");
+
+        R memberCoupons = couponFeignService.memberCoupons();
+
+        return R.ok().put("memeber",memberEntity).put("coupons",memberCoupons.get("coupons"));
     }
 
 }

@@ -32,6 +32,17 @@ public class CouponController {
     private CouponService couponService;
 
     /**
+     * 返回用户的所有优惠券信息
+     * @return
+     */
+    @RequestMapping("/member/list")
+    public R memberCoupons(){
+        CouponEntity couponEntity = new CouponEntity();
+        couponEntity.setCouponName("满两件打8折");
+        return R.ok().put("coupons",couponEntity);
+    }
+
+    /**
      * 列表
      */
     @RequestMapping("/list")

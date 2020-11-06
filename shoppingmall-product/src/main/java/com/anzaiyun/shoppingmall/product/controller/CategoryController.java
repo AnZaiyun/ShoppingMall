@@ -1,6 +1,7 @@
 package com.anzaiyun.shoppingmall.product.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -40,6 +41,17 @@ public class CategoryController {
         PageUtils page = categoryService.queryPage(params);
 
         return R.ok().put("page", page);
+    }
+
+    /**
+     * 查询所有的三级分类，并以树的形式查询展示
+     */
+    @RequestMapping("/list/tree")
+    //@RequiresPermissions("product:category:list")
+    public R listTree(){
+        List<CategoryEntity> categoryEntities = categoryService.listWithTree();
+
+        return R.ok().put("categories", categoryEntities);
     }
 
 

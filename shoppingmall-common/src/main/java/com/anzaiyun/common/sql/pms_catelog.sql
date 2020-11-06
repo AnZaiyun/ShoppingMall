@@ -11,7 +11,7 @@ CREATE TABLE `pms_category` (
   `product_unit` char(50) DEFAULT NULL COMMENT '计量单位',
   `product_count` int(11) DEFAULT NULL COMMENT '商品数量',
   PRIMARY KEY (`cat_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1433 DEFAULT CHARSET=utf8mb4 COMMENT='商品三级分类';
+) ENGINE=InnoDB AUTO_INCREMENT=1433 DEFAULT CHARSET=utf8 COMMENT='商品三级分类';
 
 /*Data for the table `pms_category` */
 

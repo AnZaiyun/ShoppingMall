@@ -14,7 +14,7 @@
  Date: 24/08/2020 23:19:10
 */
 
-SET NAMES utf8mb4;
+SET NAMES utf8;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
@@ -106,14 +106,14 @@ INSERT INTO `pms_brand` VALUES (4, '三星啊', '', NULL, NULL, NULL, NULL);
 DROP TABLE IF EXISTS `pms_category`;
 CREATE TABLE `pms_category`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '分类id',
-  `name` char(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '分类名称',
+  `name` char(50) CHARACTER SET utf8 COLLATE utf8_0900_ai_ci NULL DEFAULT NULL COMMENT '分类名称',
   `parent_id` bigint(20) NULL DEFAULT NULL COMMENT '父分类id',
   `status` tinyint(4) NULL DEFAULT NULL COMMENT '是否显示[0-不显示，1显示]',
   `sort` int(11) NULL DEFAULT NULL COMMENT '排序',
-  `icon` char(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '图标地址',
-  `unit` char(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '计量单位',
+  `icon` char(255) CHARACTER SET utf8 COLLATE utf8_0900_ai_ci NULL DEFAULT NULL COMMENT '图标地址',
+  `unit` char(50) CHARACTER SET utf8 COLLATE utf8_0900_ai_ci NULL DEFAULT NULL COMMENT '计量单位',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1432 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '商品三级分类' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1432 CHARACTER SET = utf8 COLLATE = utf8_0900_ai_ci COMMENT = '商品三级分类' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of pms_category

@@ -18,5 +18,11 @@ spring:
           uri: https://blog.csdn.net/
           predicates:
             - Query=url,csdn
+        - id: admin_route
+          uri: lb://renren-fast
+          predicates:
+            - Path=/api/**
+          filters: # ÖØ¶¨Ïò
+            - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment}
 
 

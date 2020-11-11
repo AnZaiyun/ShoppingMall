@@ -10,19 +10,19 @@ spring:
         server-addr: localhost:8848
     gateway:
       routes:
-        - id: test1
-          uri: https://www.baidu.com
-          predicates:
-            - Query=url,baidu
-        - id: test2
-          uri: https://blog.csdn.net/
-          predicates:
-            - Query=url,csdn
-        - id: admin_route
+        - id: login
           uri: lb://renren-fast
           predicates:
-            - Path=/api/**
+            - Path=/api/sys/**,/api/captcha.jpg**
           filters:
             - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment}
+        # 匹配原理,uri是重定向后的地址，根据nacos注册中心的服务名找到ip和端口
+        # 当predicates断言成立时，就会将发往网关的请求重定向至配置的uri地址，其中如果filters有配置，则会根据filters的配置修改请求信息
+        - id: product_category
+          uri: lb://shoppingmall-product
+          predicates:
+            - Path=/api/product/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
 
 

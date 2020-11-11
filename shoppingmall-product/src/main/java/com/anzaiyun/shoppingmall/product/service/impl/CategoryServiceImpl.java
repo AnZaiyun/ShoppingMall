@@ -69,4 +69,15 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
 
     }
 
+    /**
+     * 带校验的删除
+     * @param asList
+     */
+    @Override
+    public void removeMenuByIds(List<Long> asList) {
+        //TODO 校验逻辑
+        baseMapper.deleteBatchIds(asList);
+    }
+
+
 }

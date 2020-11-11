@@ -22,7 +22,7 @@ spring:
           uri: lb://renren-fast
           predicates:
             - Path=/api/**
-          filters: # ÖØ¶¨Ïò
+          filters:
             - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment}
 
 

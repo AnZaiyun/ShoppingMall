@@ -20,6 +20,9 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: auto
+      # 配置全局的逻辑删除规则
+      logic-delete-value: 1
+      logic-not-delete-value: 0
 
 #暴露服务地址，原理不清楚
 management:
@@ -27,3 +30,7 @@ management:
     web:
       exposure:
         include: '*'
+# 配置sql日志输出
+logging:
+  level:
+    com.anzaiyun.shoppingmall: debug

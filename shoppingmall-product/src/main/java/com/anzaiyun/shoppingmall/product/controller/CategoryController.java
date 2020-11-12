@@ -104,4 +104,15 @@ public class CategoryController {
         return R.ok();
     }
 
+    /**
+     * 增加新菜单
+     */
+    @RequestMapping("/add")
+    //@RequiresPermissions("product:category:save")
+    public R add(@RequestBody CategoryEntity category){
+        categoryService.addMenus(category);
+
+        return R.ok();
+    }
+
 }

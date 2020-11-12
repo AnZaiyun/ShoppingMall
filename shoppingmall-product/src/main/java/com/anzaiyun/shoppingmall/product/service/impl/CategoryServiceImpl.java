@@ -79,5 +79,17 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
         baseMapper.deleteBatchIds(asList);
     }
 
+    /**
+     * 增加新菜单
+     * @param category
+     */
+    @Override
+    public void addMenus(CategoryEntity category) {
+        //TODO 校验当前要增加的菜单是否已经存在
+
+        baseMapper.insert(category);
+
+    }
+
 
 }

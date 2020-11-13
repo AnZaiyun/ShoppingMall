@@ -115,4 +115,15 @@ public class CategoryController {
         return R.ok();
     }
 
+    /**
+     * 拖拽功能的实现
+     */
+    @RequestMapping("/draggingNodeUpdate")
+    //@RequiresPermissions("product:category:save")
+    public R draggingNodeUpdate(@RequestBody CategoryEntity[] categories){
+        categoryService.updateBatchById(Arrays.asList(categories));
+
+        return R.ok();
+    }
+
 }

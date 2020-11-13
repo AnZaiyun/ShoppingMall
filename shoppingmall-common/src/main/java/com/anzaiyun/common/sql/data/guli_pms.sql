@@ -82,23 +82,23 @@ INSERT INTO `pms_attr_group` VALUES (11, '操作系统', 2, NULL, 449, NULL);
 -- ----------------------------
 DROP TABLE IF EXISTS `pms_brand`;
 CREATE TABLE `pms_brand`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '品牌id',
+  `brand_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '品牌id',
   `name` char(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '品牌名',
+  `descript` varchar(2000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '介绍',
   `logo` varchar(2000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '品牌logo',
-  `status` tinyint(4) NULL DEFAULT NULL COMMENT '显示状态[0-不显示；1-显示]',
+  `show_status` tinyint(4) NULL DEFAULT NULL COMMENT '显示状态[0-不显示；1-显示]',
   `first_letter` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '检索首字母',
-  `sort` int(11) NULL DEFAULT NULL COMMENT '排序',
-  `remark` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '备注',
-  PRIMARY KEY (`id`) USING BTREE
+  `sort` int(11) NULL DEFAULT 0 COMMENT '排序',
+  PRIMARY KEY (`brand_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '品牌' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of pms_brand
 -- ----------------------------
-INSERT INTO `pms_brand` VALUES (1, '尚硅谷', 'http://www.atguigu.com/images/pic_new/logo.png', 1, 'S', 1, NULL);
-INSERT INTO `pms_brand` VALUES (2, '华为', 'http://www-file.huawei.com/-/media/corporate/images/home/logo/huawei_logo.png', 1, 'H', 2, NULL);
-INSERT INTO `pms_brand` VALUES (3, '小米', 'http://s02.mifile.cn/assets/static/image/mi-logo.png', 1, 'X', 3, NULL);
-INSERT INTO `pms_brand` VALUES (4, '三星啊', '', NULL, NULL, NULL, NULL);
+INSERT INTO `pms_brand` VALUES (1, '尚硅谷','尚硅谷', 'http://www.atguigu.com/images/pic_new/logo.png', 1, 'S', 1);
+INSERT INTO `pms_brand` VALUES (2, '华为', '华为','http://www-file.huawei.com/-/media/corporate/images/home/logo/huawei_logo.png', 1, 'H', 2);
+INSERT INTO `pms_brand` VALUES (3, '小米', '小米', 'http://s02.mifile.cn/assets/static/image/mi-logo.png', 1, 'X', 3);
+INSERT INTO `pms_brand` VALUES (4, '三星','三星', '', 1, 'S', 4);
 
 -- ----------------------------
 -- Table structure for pms_category

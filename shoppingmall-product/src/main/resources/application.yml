@@ -13,6 +13,11 @@ spring:
     nacos:
       discovery:
         server-addr: localhost:8848
+    alicloud:
+      access-key: LTAI4Fzqdnk1guSMpuokSQZ5
+      secret-key: tDNe03mZBo8GjIA4ZDSHiGFoHntsay
+      oss:
+        endpoint: oss-cn-beijing.aliyuncs.com
 
 
 mybatis-plus:

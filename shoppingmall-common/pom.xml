@@ -69,20 +69,6 @@
             <version>2.2.2.RELEASE</version>
         </dependency>
 
-        <!-- 阿里云对象存储功能 -->
-<!--        新版本不兼容-->
-<!--        <dependency>-->
-<!--            <groupId>com.alibaba.cloud</groupId>-->
-<!--            <artifactId>aliyun-oss-spring-boot-starter</artifactId>-->
-<!--            <version>1.0.0</version>-->
-<!--        </dependency>-->
-
-        <!-- 阿里云对象存储功能 -->
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alicloud-oss</artifactId>
-        </dependency>
-
     </dependencies>
 
     <dependencyManagement>

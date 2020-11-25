@@ -1,8 +1,8 @@
 package com.anzaiyun.shoppingmall.product;
 
-import com.aliyun.oss.OSS;
-import com.aliyun.oss.OSSClient;
-import com.aliyun.oss.OSSClientBuilder;
+//import com.aliyun.oss.OSS;
+//import com.aliyun.oss.OSSClient;
+//import com.aliyun.oss.OSSClientBuilder;
 import com.anzaiyun.shoppingmall.product.entity.BrandEntity;
 import com.anzaiyun.shoppingmall.product.service.BrandService;
 import org.junit.jupiter.api.Test;
@@ -19,8 +19,8 @@ class ShoppingmallProductApplicationTests {
     @Autowired
     BrandService brandService;
 
-    @Autowired
-    OSSClient ossClient;
+//    @Autowired
+//    OSSClient ossClient;
     //测试阿里云存储功能
     @Test
     void testUpload() throws FileNotFoundException {
@@ -34,11 +34,11 @@ class ShoppingmallProductApplicationTests {
 //        OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
 
         // 上传文件流。
-        InputStream inputStream = new FileInputStream("C:\\Users\\hspcadmin\\Desktop\\oss_jpg.png");
-        ossClient.putObject("an-shopping-mall", "oss_jpg", inputStream);
-
-        // 关闭OSSClient。
-        ossClient.shutdown();
+//        InputStream inputStream = new FileInputStream("C:\\Users\\hspcadmin\\Desktop\\oss_jpg.png");
+//        ossClient.putObject("an-shopping-mall", "oss_jpg", inputStream);
+//
+//        // 关闭OSSClient。
+//        ossClient.shutdown();
     }
 
     @Test

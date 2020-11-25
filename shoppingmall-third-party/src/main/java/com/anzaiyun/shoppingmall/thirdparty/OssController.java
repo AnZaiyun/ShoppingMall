@@ -5,6 +5,7 @@ import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.common.utils.BinaryUtil;
 import com.aliyun.oss.model.MatchMode;
 import com.aliyun.oss.model.PolicyConditions;
+import com.anzaiyun.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +31,7 @@ public class OssController {
     private String accessKey;
 
     @RequestMapping("/policy")
-    public Map<String, String> policy(){
+    public R policy(){
 
         String bucket = "an-shopping-mall"; // 请填写您的 bucketname 。
         String host = "https://" + bucket + "." + endpoint; // host的格式为 bucketname.endpoint
@@ -73,7 +74,7 @@ public class OssController {
             ossClient.shutdown();
         }
 
-        return respMap;
+        return R.ok().put("data",respMap);
 
     }
 }

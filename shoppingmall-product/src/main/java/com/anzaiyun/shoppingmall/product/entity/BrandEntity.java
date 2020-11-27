@@ -7,6 +7,9 @@ import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 /**
  * 品牌
  * 
@@ -47,6 +50,7 @@ public class BrandEntity implements Serializable {
 	/**
 	 * 排序
 	 */
+	@NotNull(message = "不可以为空")
 	private Integer sort;
 
 }

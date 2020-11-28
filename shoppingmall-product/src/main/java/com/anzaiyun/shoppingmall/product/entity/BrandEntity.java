@@ -1,5 +1,8 @@
 package com.anzaiyun.shoppingmall.product.entity;
 
+import com.anzaiyun.common.valid.AddGroup;
+import com.anzaiyun.common.valid.DeleteGroup;
+import com.anzaiyun.common.valid.UpdateGroup;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
@@ -9,6 +12,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 
 /**
  * 品牌
@@ -25,11 +29,14 @@ public class BrandEntity implements Serializable {
 	/**
 	 * 品牌id
 	 */
+	@NotNull(message = "修改或删除必须指定品牌ID", groups = {UpdateGroup.class, DeleteGroup.class})
+	@Null(message = "新增不能指定品牌ID", groups = {AddGroup.class})
 	@TableId
 	private Long brandId;
 	/**
 	 * 品牌名
 	 */
+	@NotBlank(message = "品牌名必须提交",groups = {AddGroup.class, UpdateGroup.class})
 	private String name;
 	/**
 	 * 品牌logo地址
@@ -50,7 +57,8 @@ public class BrandEntity implements Serializable {
 	/**
 	 * 排序
 	 */
-	@NotNull(message = "不可以为空")
+	//校验不指定分组，校验会不起作用
+	@NotNull(message = "不可以为空", groups = {AddGroup.class, UpdateGroup.class})
 	private Integer sort;
 
 }

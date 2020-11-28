@@ -104,6 +104,18 @@ public class BrandController {
     }
 
     /**
+     * 这里只用来修改状态字段
+     * @param brand
+     * @return
+     */
+    @RequestMapping("/update/status")
+    //@RequiresPermissions("product:brand:update")
+    public R updateStatus(@RequestBody BrandEntity brand){
+        brandService.updateById(brand);
+        return R.ok();
+    }
+
+    /**
      * 删除
      */
     @RequestMapping("/delete")

@@ -1,6 +1,7 @@
 package com.anzaiyun.shoppingmall.product.entity;
 
 import com.anzaiyun.common.valid.AddGroup;
+import com.anzaiyun.common.valid.Anno.IntListValue;
 import com.anzaiyun.common.valid.DeleteGroup;
 import com.anzaiyun.common.valid.UpdateGroup;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -49,6 +50,7 @@ public class BrandEntity implements Serializable {
 	/**
 	 * 显示状态[0-不显示；1-显示]
 	 */
+	@IntListValue(vals = {0,1},groups = {AddGroup.class, UpdateGroup.class})
 	private Integer showStatus;
 	/**
 	 * 检索首字母

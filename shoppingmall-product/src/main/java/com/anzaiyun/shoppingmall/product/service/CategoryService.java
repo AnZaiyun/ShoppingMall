@@ -24,5 +24,6 @@ public interface CategoryService extends IService<CategoryEntity> {
 
     void addMenus(CategoryEntity category);
 
+    Long[] findCatelogIds(Long catelogId);
 }
 

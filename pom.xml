@@ -14,10 +14,12 @@
         <module>shoppingmall-member</module>
         <module>shoppingmall-order</module>
         <module>shoppingmall-product</module>
+        <module>shoppingmall-third-party</module>
         <module>shoppingmall-ware</module>
         <module>renren-fast</module>
         <module>shoppingmall-common</module>
         <module>renren-generator</module>
+
     </modules>
 
 

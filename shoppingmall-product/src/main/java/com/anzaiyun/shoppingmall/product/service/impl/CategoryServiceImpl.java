@@ -2,9 +2,7 @@ package com.anzaiyun.shoppingmall.product.service.impl;
 
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -86,6 +84,30 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
         //TODO 校验当前要增加的菜单是否已经存在
 
         baseMapper.insert(category);
+
+    }
+
+    /**
+     * 找到catelog的完整路径，格式:父路径。。。子路径
+     * @param catelogId
+     * @return
+     */
+    @Override
+    public Long[] findCatelogIds(Long catelogId) {
+        List<Long> paths = new ArrayList<>();
+        Collections.reverse(findParentPath(catelogId,paths));
+        this.getById(catelogId);
+        return (Long[]) paths.toArray(new Long[paths.size()]);
+    }
+
+    private  List<Long> findParentPath(Long catelogId,List<Long> paths){
+        paths.add(catelogId);
+        CategoryEntity byId = this.getById(catelogId);
+
+        if(byId.getParentCid()!=0){
+            findParentPath(byId.getParentCid(),paths);
+        }
+        return paths;
 
     }
 

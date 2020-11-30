@@ -9,6 +9,7 @@ spring:
       discovery:
         server-addr: localhost:8848
     alicloud:
+#      已经废弃不做使用，这里仅做演示
       access-key: LTAI4Fzqdnk1guSMpuokSQZ5
       secret-key: tDNe03mZBo8GjIA4ZDSHiGFoHntsay
       oss:

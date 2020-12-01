@@ -11,6 +11,7 @@ import com.anzaiyun.common.utils.Query;
 import com.anzaiyun.shoppingmall.product.dao.BrandDao;
 import com.anzaiyun.shoppingmall.product.entity.BrandEntity;
 import com.anzaiyun.shoppingmall.product.service.BrandService;
+import org.springframework.util.StringUtils;
 
 
 @Service("brandService")
@@ -18,9 +19,18 @@ public class BrandServiceImpl extends ServiceImpl<BrandDao, BrandEntity> impleme
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
+        String key = (String) params.get("key");
+        QueryWrapper<BrandEntity> queryWrapper = new QueryWrapper<>();
+
+        if(!StringUtils.isEmpty(key)){
+            queryWrapper.eq("brand_id",key).or().
+                    like("name",key).or().
+                    like("descript",key);
+        }
+
         IPage<BrandEntity> page = this.page(
                 new Query<BrandEntity>().getPage(params),
-                new QueryWrapper<BrandEntity>()
+                queryWrapper
         );
 
         return new PageUtils(page);

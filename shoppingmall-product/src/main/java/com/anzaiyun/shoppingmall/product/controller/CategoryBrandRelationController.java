@@ -42,6 +42,17 @@ public class CategoryBrandRelationController {
         return R.ok().put("page", page);
     }
 
+    /**
+     * 列表
+     */
+    @RequestMapping("/catelog/list")
+    //@RequiresPermissions("product:categorybrandrelation:list")
+    public R cateloglist(@RequestParam Map<String, Object> params){
+        PageUtils page = categoryBrandRelationService.queryPage(params);
+
+        return R.ok().put("page", page);
+    }
+
 
     /**
      * 信息
@@ -60,7 +71,10 @@ public class CategoryBrandRelationController {
     @RequestMapping("/save")
     //@RequiresPermissions("product:categorybrandrelation:save")
     public R save(@RequestBody CategoryBrandRelationEntity categoryBrandRelation){
-		categoryBrandRelationService.save(categoryBrandRelation);
+//        categoryBrandRelationService.save(categoryBrandRelation);
+
+        //需要根据品牌id和分类id关联出分类名
+        categoryBrandRelationService.saveWithName(categoryBrandRelation);
 
         return R.ok();
     }

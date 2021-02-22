@@ -25,5 +25,11 @@ public interface CategoryService extends IService<CategoryEntity> {
     void addMenus(CategoryEntity category);
 
     Long[] findCatelogIds(Long catelogId);
+
+    /**
+     * 级联更新，需要一并更新相关的关联表
+     * @param category
+     */
+    void updateCascade(CategoryEntity category);
 }
 

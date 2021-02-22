@@ -1,5 +1,6 @@
 package com.anzaiyun.shoppingmall.product.service.impl;
 
+import com.anzaiyun.shoppingmall.product.service.CategoryBrandRelationService;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -15,9 +16,14 @@ import com.anzaiyun.shoppingmall.product.dao.CategoryDao;
 import com.anzaiyun.shoppingmall.product.entity.CategoryEntity;
 import com.anzaiyun.shoppingmall.product.service.CategoryService;
 
+import javax.annotation.Resource;
+
 
 @Service("categoryService")
 public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity> implements CategoryService {
+
+    @Resource
+    CategoryBrandRelationService categoryBrandRelationService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -98,6 +104,12 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
         Collections.reverse(findParentPath(catelogId,paths));
         this.getById(catelogId);
         return (Long[]) paths.toArray(new Long[paths.size()]);
+    }
+
+    @Override
+    public void updateCascade(CategoryEntity category) {
+        this.updateById(category);
+        categoryBrandRelationService.updateCategory(category.getCatId(),category.getName());
     }
 
     private  List<Long> findParentPath(Long catelogId,List<Long> paths){

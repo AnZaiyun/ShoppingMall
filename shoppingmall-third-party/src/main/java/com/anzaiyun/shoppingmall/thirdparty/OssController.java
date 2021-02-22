@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -25,13 +26,28 @@ public class OssController {
 
     @Value("${spring.cloud.alicloud.oss.endpoint}")
     private String endpoint;
-    @Value("${spring.cloud.alicloud.access-key}")
+
     private String accessId;
-    @Value("${spring.cloud.alicloud.secret-key}")
     private String accessKey;
 
     @RequestMapping("/policy")
     public R policy(){
+
+        File csvFile = new File("C:\\Users\\hspcadmin\\Desktop\\AccessKey.csv");
+        String[] key;
+        String inString = "";
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(csvFile));
+            while ((inString = reader.readLine())!=null){
+                key = inString.split(",");
+                accessId = key[0];
+                accessKey = key[1];
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         String bucket = "an-shopping-mall"; // 请填写您的 bucketname 。
         String host = "https://" + bucket + "." + endpoint; // host的格式为 bucketname.endpoint

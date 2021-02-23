@@ -1,5 +1,6 @@
 package com.anzaiyun.shoppingmall.product.service;
 
+import com.anzaiyun.shoppingmall.product.vo.AttrRespVo;
 import com.anzaiyun.shoppingmall.product.vo.AttrVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.anzaiyun.common.utils.PageUtils;
@@ -21,5 +22,10 @@ public interface AttrService extends IService<AttrEntity> {
     void saveAttr(AttrVo attr);
 
     PageUtils queryBaseAttrpage(Map<String, Object> params, Long catId);
+
+    AttrRespVo getAttrInfo(Long attrId);
+
+    void updateAttr(AttrVo attr);
+
 }
 

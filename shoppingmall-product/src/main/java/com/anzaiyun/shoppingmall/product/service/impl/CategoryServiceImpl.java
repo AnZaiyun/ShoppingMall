@@ -15,6 +15,7 @@ import com.anzaiyun.common.utils.Query;
 import com.anzaiyun.shoppingmall.product.dao.CategoryDao;
 import com.anzaiyun.shoppingmall.product.entity.CategoryEntity;
 import com.anzaiyun.shoppingmall.product.service.CategoryService;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -107,6 +108,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
     }
 
     @Override
+    @Transactional
     public void updateCascade(CategoryEntity category) {
         this.updateById(category);
         categoryBrandRelationService.updateCategory(category.getCatId(),category.getName());

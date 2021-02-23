@@ -13,6 +13,7 @@ import com.anzaiyun.common.utils.Query;
 import com.anzaiyun.shoppingmall.product.dao.BrandDao;
 import com.anzaiyun.shoppingmall.product.entity.BrandEntity;
 import com.anzaiyun.shoppingmall.product.service.BrandService;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -43,6 +44,7 @@ public class BrandServiceImpl extends ServiceImpl<BrandDao, BrandEntity> impleme
 
 
     @Override
+    @Transactional
     public void updateDetail(BrandEntity brand) {
         this.updateById(brand);
         if(!StringUtils.isNullOrEmpty(brand.getName())){

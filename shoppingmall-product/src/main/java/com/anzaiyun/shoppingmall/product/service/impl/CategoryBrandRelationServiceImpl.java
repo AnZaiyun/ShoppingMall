@@ -61,7 +61,8 @@ public class CategoryBrandRelationServiceImpl extends ServiceImpl<CategoryBrandR
 
     @Override
     public void updateCategory(Long catId, String name) {
-
+        //此处使用了与更新品牌方法（updateBrand）不同的实现逻辑，这里采用配置sql语句的方法进行更新。
+        this.baseMapper.updateCategory(catId,name);
     }
 
 

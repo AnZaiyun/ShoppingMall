@@ -1,5 +1,6 @@
 package com.anzaiyun.shoppingmall.product.service;
 
+import com.anzaiyun.shoppingmall.product.vo.AttrVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.anzaiyun.common.utils.PageUtils;
 import com.anzaiyun.shoppingmall.product.entity.AttrEntity;
@@ -16,5 +17,9 @@ import java.util.Map;
 public interface AttrService extends IService<AttrEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    void saveAttr(AttrVo attr);
+
+    PageUtils queryBaseAttrpage(Map<String, Object> params, Long catId);
 }
 

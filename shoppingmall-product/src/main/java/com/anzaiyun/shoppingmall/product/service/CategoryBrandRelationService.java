@@ -3,7 +3,6 @@ package com.anzaiyun.shoppingmall.product.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.anzaiyun.common.utils.PageUtils;
 import com.anzaiyun.shoppingmall.product.entity.CategoryBrandRelationEntity;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.Map;
 
@@ -32,6 +31,6 @@ public interface CategoryBrandRelationService extends IService<CategoryBrandRela
      * @param catId
      * @param name
      */
-    void updateCategory(@Param("catId") Long catId,@Param("name") String name);
+    void updateCategory(Long catId,String name);
 }
 

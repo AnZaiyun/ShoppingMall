@@ -63,6 +63,7 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
         AttrEntity attrEntity = new AttrEntity();
         BeanUtils.copyProperties(attr,attrEntity);
         //保存基本数据
+        //这里保存数据后，会将保存入库后的数据查询出来，在存到attrEntity对象中
         this.save(attrEntity);
         //保存关联关系，只有基本属性才需要保存分组信息
         if(attr.getAttrType() == 1) {
@@ -104,7 +105,9 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
 
             if (attrId != null && "base".equalsIgnoreCase(attrType)) {
                 AttrGroupEntity attrGroupEntity = attrGroupDao.selectById(attrId.getAttrGroupId());
-                attrRespVo.setGroupName(attrGroupEntity.getAttrGroupName());
+                if (attrGroupEntity!= null) {
+                    attrRespVo.setGroupName(attrGroupEntity.getAttrGroupName());
+                }
             }
 
             CategoryEntity categoryEntity = categoryDao.selectById(attrEntity.getCatelogId());

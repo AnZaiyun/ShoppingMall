@@ -33,7 +33,7 @@ public class OssController {
     @RequestMapping("/policy")
     public R policy(){
 
-        File csvFile = new File("C:\\Users\\hspcadmin\\Desktop\\AccessKey.csv");
+        File csvFile = new File("C:\\Users\\AnZaiyun\\Desktop\\AccessKey.csv");
         String[] key;
         String inString = "";
         try {

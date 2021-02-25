@@ -4,12 +4,9 @@ import java.util.Arrays;
 import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.anzaiyun.common.to.SkuReductionAndLadderTo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.anzaiyun.shoppingmall.coupon.entity.SkuFullReductionEntity;
 import com.anzaiyun.shoppingmall.coupon.service.SkuFullReductionService;
@@ -61,6 +58,17 @@ public class SkuFullReductionController {
     //@RequiresPermissions("coupon:skufullreduction:save")
     public R save(@RequestBody SkuFullReductionEntity skuFullReduction){
 		skuFullReductionService.save(skuFullReduction);
+
+        return R.ok();
+    }
+
+    /**
+     * 保存
+     */
+    @PostMapping("/saveReductionAndLadder")
+    //@RequiresPermissions("coupon:skufullreduction:save")
+    public R saveSkuReductionAndLadder(@RequestBody SkuReductionAndLadderTo skuReductionAndLadderTo){
+        skuFullReductionService.saveSkuReductionAndLadder(skuReductionAndLadderTo);
 
         return R.ok();
     }

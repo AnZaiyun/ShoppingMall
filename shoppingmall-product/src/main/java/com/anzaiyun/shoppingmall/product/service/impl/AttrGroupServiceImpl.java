@@ -2,10 +2,14 @@ package com.anzaiyun.shoppingmall.product.service.impl;
 
 import com.anzaiyun.shoppingmall.product.entity.AttrEntity;
 import com.anzaiyun.shoppingmall.product.service.AttrService;
+import com.anzaiyun.shoppingmall.product.vo.AttrGroupWithAttrsVo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -79,6 +83,27 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
         List<AttrEntity> data = attrService.list(queryWrapper);
 
         return data;
+    }
+
+    /**
+     * 根据分类id查询当前分类下的所有规格参数信息，并按照所属的分组返回
+     * @param catId
+     * @return
+     */
+    @Override
+    public List<AttrGroupWithAttrsVo> getAttrGroupWithAttrsByCatelogId(Long catId) {
+        List<AttrGroupEntity> attrGroups = this.list(new QueryWrapper<AttrGroupEntity>().eq("catelog_id", catId));
+
+        List<AttrGroupWithAttrsVo> attrGroupWithAttrsVoList = attrGroups.stream().map(
+                attrGroup -> {
+                    AttrGroupWithAttrsVo attrsVo = new AttrGroupWithAttrsVo();
+                    BeanUtils.copyProperties(attrGroup,attrsVo);
+                    List<AttrEntity> attrList = attrService.list(new QueryWrapper<AttrEntity>().eq("attr_group_id", attrGroup.getAttrGroupId()));
+                    attrsVo.setAttrs(attrList);
+                    return attrsVo;
+                }
+        ).collect(Collectors.toList());
+        return attrGroupWithAttrsVoList;
     }
 
 }

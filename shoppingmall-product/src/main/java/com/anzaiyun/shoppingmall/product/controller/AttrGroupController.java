@@ -6,7 +6,10 @@ import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
 import com.anzaiyun.shoppingmall.product.entity.AttrEntity;
+import com.anzaiyun.shoppingmall.product.service.AttrService;
 import com.anzaiyun.shoppingmall.product.service.CategoryService;
+import com.anzaiyun.shoppingmall.product.vo.AttrGroupWithAttrsVo;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -65,15 +68,20 @@ public class AttrGroupController {
         return R.ok().put("data", data);
     }
 
-    //http://localhost:88/api/product/attrgroup/1/noattr/relation?t=1614130884513&page=1&limit=10&key=
-//    @RequestMapping("/{groupId}/noattr/relation")
-//    //@RequiresPermissions("product:attrgroup:list")
-//    public R attrRelationList(@RequestParam Map<String, Object> params,
-//                              @PathVariable("groupId") Long groupId){
-//
-//        List<AttrEntity> data = attrGroupService.queryAttrByGroupId(params,groupId);
-//        return R.ok().put("data", data);
-//    }
+    /**
+     * http://localhost:88/api/product/attrgroup/225/withattr?t=1614215764070
+     * @param catId
+     * @return
+     */
+    @RequestMapping("/{catId}/withattr")
+    public R withattr(@PathVariable("catId") Long catId){
+        //1、查出当前分类下的所有属性分组，
+        //2、查出每个属性分组的所有属性
+        QueryWrapper<AttrEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("catelog_id",catId);
+        List<AttrGroupWithAttrsVo> data = attrGroupService.getAttrGroupWithAttrsByCatelogId(catId);
+        return R.ok().put("data", data);
+    }
 
     /**
      * 信息

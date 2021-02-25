@@ -24,6 +24,12 @@ spring:
             - Path=/api/product/**
           filters:
             - RewritePath=/api/(?<segment>.*),/$\{segment}
+        - id: member_route
+          uri: lb://shoppingmall-member
+          predicates:
+            - Path=/api/member/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
         - id: third_party
           uri: lb://shoppingmall-third-party
           predicates:

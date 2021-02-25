@@ -65,6 +65,8 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
         //保存基本数据
         //这里保存数据后，会将保存入库后的数据查询出来，在存到attrEntity对象中
         this.save(attrEntity);
+        //attr表中包含attr_group_id字段，但是当前attr实体类未包含这个字段，暂不清楚原因为何，因此在这里单独写一段更新groupid的逻辑
+        this.baseMapper.updateAttrGroupIdByAttrId(attrEntity.getAttrId(),attr.getAttrGroupId());
         //保存关联关系，只有基本属性才需要保存分组信息
         if(attr.getAttrType() == 1) {
             AttrAttrgroupRelationEntity attrAttrgroupRelationEntity = new AttrAttrgroupRelationEntity();
@@ -157,6 +159,9 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
         AttrEntity attrEntity = new AttrEntity();
         BeanUtils.copyProperties(attr,attrEntity);
         this.baseMapper.updateById(attrEntity);
+
+        //attr表中包含attr_group_id字段，但是当前attr实体类未包含这个字段，暂不清楚原因为何，因此在这里单独写一段更新groupid的逻辑
+        this.baseMapper.updateAttrGroupIdByAttrId(attrEntity.getAttrId(),attr.getAttrGroupId());
 
         //只有基本属性才需要保存分组信息,这里使用枚举类型的方式
         if(attr.getAttrType() == ProductConstant.AttrEnum.ATTR_TYPE_BASE.getCode()) {

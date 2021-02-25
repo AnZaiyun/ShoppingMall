@@ -1,6 +1,7 @@
 package com.anzaiyun.shoppingmall.product.service;
 
 import com.anzaiyun.shoppingmall.product.entity.AttrEntity;
+import com.anzaiyun.shoppingmall.product.vo.AttrGroupWithAttrsVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.anzaiyun.common.utils.PageUtils;
 import com.anzaiyun.shoppingmall.product.entity.AttrGroupEntity;
@@ -22,5 +23,7 @@ public interface AttrGroupService extends IService<AttrGroupEntity> {
     PageUtils queryPage(Map<String, Object> params, Long catelogId);
 
     List<AttrEntity> queryAttrByGroupId(Map<String, Object> params, Long groupId);
+
+    List<AttrGroupWithAttrsVo> getAttrGroupWithAttrsByCatelogId(Long catId);
 }
 

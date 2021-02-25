@@ -4,8 +4,11 @@ import java.util.Arrays;
 import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.anzaiyun.shoppingmall.product.entity.AttrAttrgroupRelationEntity;
+import com.anzaiyun.shoppingmall.product.service.AttrAttrgroupRelationService;
 import com.anzaiyun.shoppingmall.product.vo.AttrRespVo;
 import com.anzaiyun.shoppingmall.product.vo.AttrVo;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.anzaiyun.shoppingmall.product.entity.AttrEntity;
 import com.anzaiyun.shoppingmall.product.service.AttrService;
 import com.anzaiyun.common.utils.PageUtils;
 import com.anzaiyun.common.utils.R;
@@ -32,6 +34,9 @@ import com.anzaiyun.common.utils.R;
 public class AttrController {
     @Autowired
     private AttrService attrService;
+
+    @Autowired
+    private AttrAttrgroupRelationService attrgroupRelationService;
 
     /**
      * 列表
@@ -103,6 +108,15 @@ public class AttrController {
     public R delete(@RequestBody Long[] attrIds){
 		attrService.removeByIds(Arrays.asList(attrIds));
 
+		//同时删除关联表中的数据
+        if (attrIds.length>0) {
+            QueryWrapper<AttrAttrgroupRelationEntity> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("attr_id", attrIds[0]);
+            for (Long attrId : attrIds) {
+                queryWrapper.or().eq("attr_id", attrId);
+            }
+            attrgroupRelationService.remove(queryWrapper);
+        }
         return R.ok();
     }
 

@@ -40,6 +40,22 @@ public class CategoryBrandRelationController {
         return R.ok().put("page", page);
     }
 
+    /**
+     * http://localhost:88/api/product/categorybrandrelation/brands/list?t=1614214755723&catId=225
+     * 返回与分类相关联的品牌
+     * @param params
+     * @return
+     */
+    @RequestMapping("/brands/list")
+    //@RequiresPermissions("product:categorybrandrelation:list")
+    public R brandsList(@RequestParam Map<String, Object> params){
+        String catId = (String) params.get("catId");
+        QueryWrapper<CategoryBrandRelationEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("catelog_id",catId);
+        List<CategoryBrandRelationEntity> data = categoryBrandRelationService.list(queryWrapper);
+
+        return R.ok().put("data", data);
+    }
 
     /**
      * 信息

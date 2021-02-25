@@ -16,5 +16,11 @@
         <result property="showDesc" column="show_desc"/>
     </resultMap>
 
+    <update id="updateAttrGroupIdByAttrId">
+        update `pms_attr`
+        set attr_group_id = #{attrGroupId}
+        where attr_id = #{attrId}
+    </update>
+
 
 </mapper>

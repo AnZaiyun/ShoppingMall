@@ -3,6 +3,7 @@ package com.anzaiyun.shoppingmall.product.dao;
 import com.anzaiyun.shoppingmall.product.entity.AttrEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 商品属性
@@ -13,5 +14,6 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface AttrDao extends BaseMapper<AttrEntity> {
-	
+
+    void updateAttrGroupIdByAttrId(@Param("attrId") Long attrId, @Param("attrGroupId") Long attrGroupId);
 }

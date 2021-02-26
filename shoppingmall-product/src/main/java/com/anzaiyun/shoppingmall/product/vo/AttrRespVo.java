@@ -16,7 +16,4 @@ public class AttrRespVo extends AttrEntity {
 
     private Long[] catelogPath;
 
-//    这个字段在数据库中不存在，教程视频目前也未用到这个字段，这里先顺便给一个值，保证前台不报错
-    private Integer valueType = 1;
-
 }

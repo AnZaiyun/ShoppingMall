@@ -66,22 +66,24 @@ public class SkuFullReductionServiceImpl extends ServiceImpl<SkuFullReductionDao
         }
 
         //3、保存会员价格信息  sms_member_price
-        List<MemberPrice> memberPrices = skuReductionAndLadderTo.getMemberPrices();
-        List<MemberPriceEntity> collect = memberPrices.stream().map(memberPrice -> {
-            MemberPriceEntity memberPriceEntity = new MemberPriceEntity();
-            memberPriceEntity.setSkuId(skuReductionAndLadderTo.getSkuId());
-            memberPriceEntity.setMemberLevelId(memberPrice.getId());
-            memberPriceEntity.setMemberPrice(memberPrice.getPrice());
-            memberPriceEntity.setMemberLevelName(memberPrice.getName());
-            memberPriceEntity.setAddOther(1);
+        List<MemberPrice> memberPrices = skuReductionAndLadderTo.getMemberPrice();
+        if (memberPrices != null && memberPrices.size()>0) {
+            List<MemberPriceEntity> collect = memberPrices.stream().map(memberPriceItem -> {
+                MemberPriceEntity memberPriceEntity = new MemberPriceEntity();
+                memberPriceEntity.setSkuId(skuReductionAndLadderTo.getSkuId());
+                memberPriceEntity.setMemberLevelId(memberPriceItem.getId());
+                memberPriceEntity.setMemberPrice(memberPriceItem.getPrice());
+                memberPriceEntity.setMemberLevelName(memberPriceItem.getName());
+                memberPriceEntity.setAddOther(1);
 
-            return memberPriceEntity;
+                return memberPriceEntity;
 
-        }).filter(memberPrice ->{
-            return memberPrice.getMemberPrice().compareTo(new BigDecimal("0")) == 1;
-        }).collect(Collectors.toList());
+            }).filter(memberPriceItem -> {
+                return memberPriceItem.getMemberPrice().compareTo(new BigDecimal("0")) == 1;
+            }).collect(Collectors.toList());
 
-        memberPriceService.saveBatch(collect);
+            memberPriceService.saveBatch(collect);
+        }
 
     }
 

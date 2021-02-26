@@ -17,5 +17,5 @@ public class SkuReductionAndLadderTo {
     private BigDecimal reducePrice;
     private int priceStatus;
 
-    private List<MemberPrice> memberPrices;
+    private List<MemberPrice> memberPrice;
 }

@@ -34,11 +34,12 @@ public class SpuInfoController {
 
     /**
      * 列表
+     * spu管理页面，检索功能  http://localhost:88/api/product/spuinfo/list?t=1614691319075&status=0&key=%E5%B0%8F%E7%B1%B3&brandId=2&catelogId=225&page=1&limit=10
      */
     @RequestMapping("/list")
     //@RequiresPermissions("product:spuinfo:list")
     public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = spuInfoService.queryPage(params);
+        PageUtils page = spuInfoService.queryPageByCondition(params);
 
         return R.ok().put("page", page);
     }

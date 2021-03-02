@@ -15,6 +15,8 @@ spring:
     nacos:
       discovery:
         server-addr: localhost:8848
+  jackson:
+    date-format: yyyy-MM-dd HH:ss:ss
 #    alicloud:
 #      access-key: LTAI4Fzqdnk1guSMpuokSQZ5
 #      secret-key: tDNe03mZBo8GjIA4ZDSHiGFoHntsay
@@ -41,3 +43,4 @@ management:
 logging:
   level:
     com.anzaiyun.shoppingmall: debug
+

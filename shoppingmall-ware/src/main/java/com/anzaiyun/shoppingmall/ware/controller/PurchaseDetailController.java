@@ -33,11 +33,12 @@ public class PurchaseDetailController {
 
     /**
      * 列表
+     * 带条件查询 http://localhost:88/api/ware/purchasedetail/list?t=1614740264935&page=1&limit=10&key=&status=&wareId=3
      */
     @RequestMapping("/list")
     //@RequiresPermissions("ware:purchasedetail:list")
     public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = purchaseDetailService.queryPage(params);
+        PageUtils page = purchaseDetailService.queryPageByCondition(params);
 
         return R.ok().put("page", page);
     }

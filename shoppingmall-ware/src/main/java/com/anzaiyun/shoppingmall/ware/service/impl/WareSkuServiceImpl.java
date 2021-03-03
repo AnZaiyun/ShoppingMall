@@ -11,6 +11,7 @@ import com.anzaiyun.common.utils.Query;
 import com.anzaiyun.shoppingmall.ware.dao.WareSkuDao;
 import com.anzaiyun.shoppingmall.ware.entity.WareSkuEntity;
 import com.anzaiyun.shoppingmall.ware.service.WareSkuService;
+import org.springframework.util.StringUtils;
 
 
 @Service("wareSkuService")
@@ -24,6 +25,33 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
         );
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public PageUtils queryPageByCondition(Map<String, Object> params) {
+        QueryWrapper<WareSkuEntity> queryWrapper = new QueryWrapper<WareSkuEntity>();
+
+        String skuId = (String) params.get("skuId");
+        if(!StringUtils.isEmpty(skuId) && !"0".equalsIgnoreCase(skuId)){
+            queryWrapper.and(w->{
+                w.eq("sku_id",skuId);
+            });
+        }
+
+        String wareId = (String) params.get("ware_id");
+        if(!StringUtils.isEmpty(wareId) && !"0".equalsIgnoreCase(wareId)){
+            queryWrapper.and(w->{
+                w.eq("ware_id",wareId);
+            });
+        }
+
+        IPage<WareSkuEntity> page = this.page(
+                new Query<WareSkuEntity>().getPage(params),
+                queryWrapper
+        );
+
+        return new PageUtils(page);
+
     }
 
 }

@@ -1,6 +1,7 @@
 package com.anzaiyun.shoppingmall.ware.controller;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -33,11 +34,12 @@ public class PurchaseController {
 
     /**
      * 列表
+     * 带条件查询 http://localhost:88/api/ware/purchase/list?t=1614739687653&page=1&limit=10&key=&status=
      */
     @RequestMapping("/list")
     //@RequiresPermissions("ware:purchase:list")
     public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = purchaseService.queryPage(params);
+        PageUtils page = purchaseService.queryPageByCondition(params);
 
         return R.ok().put("page", page);
     }
@@ -60,6 +62,8 @@ public class PurchaseController {
     @RequestMapping("/save")
     //@RequiresPermissions("ware:purchase:save")
     public R save(@RequestBody PurchaseEntity purchase){
+        purchase.setCreateTime(new Date());
+        purchase.setUpdateTime(new Date());
 		purchaseService.save(purchase);
 
         return R.ok();
@@ -71,6 +75,7 @@ public class PurchaseController {
     @RequestMapping("/update")
     //@RequiresPermissions("ware:purchase:update")
     public R update(@RequestBody PurchaseEntity purchase){
+        purchase.setUpdateTime(new Date());
 		purchaseService.updateById(purchase);
 
         return R.ok();

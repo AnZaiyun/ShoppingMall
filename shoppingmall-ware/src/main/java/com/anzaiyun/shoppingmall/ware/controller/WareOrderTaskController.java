@@ -1,6 +1,7 @@
 package com.anzaiyun.shoppingmall.ware.controller;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -37,7 +38,7 @@ public class WareOrderTaskController {
     @RequestMapping("/list")
     //@RequiresPermissions("ware:wareordertask:list")
     public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = wareOrderTaskService.queryPage(params);
+        PageUtils page = wareOrderTaskService.queryPageByCondition(params);
 
         return R.ok().put("page", page);
     }
@@ -60,6 +61,8 @@ public class WareOrderTaskController {
     @RequestMapping("/save")
     //@RequiresPermissions("ware:wareordertask:save")
     public R save(@RequestBody WareOrderTaskEntity wareOrderTask){
+        //创建日期放到后台，前台不开放维护
+        wareOrderTask.setCreateTime(new Date());
 		wareOrderTaskService.save(wareOrderTask);
 
         return R.ok();
@@ -71,6 +74,7 @@ public class WareOrderTaskController {
     @RequestMapping("/update")
     //@RequiresPermissions("ware:wareordertask:update")
     public R update(@RequestBody WareOrderTaskEntity wareOrderTask){
+        wareOrderTask.setCreateTime(new Date());
 		wareOrderTaskService.updateById(wareOrderTask);
 
         return R.ok();

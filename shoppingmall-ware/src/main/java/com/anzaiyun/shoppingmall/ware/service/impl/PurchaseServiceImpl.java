@@ -1,5 +1,6 @@
 package com.anzaiyun.shoppingmall.ware.service.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -18,9 +19,35 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, PurchaseEntity
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
+        QueryWrapper<PurchaseEntity> queryWrapper = new QueryWrapper<PurchaseEntity>();
         IPage<PurchaseEntity> page = this.page(
                 new Query<PurchaseEntity>().getPage(params),
                 new QueryWrapper<PurchaseEntity>()
+        );
+
+        return new PageUtils(page);
+    }
+
+    @Override
+    public PageUtils queryPageByCondition(Map<String, Object> params) {
+        QueryWrapper<PurchaseEntity> queryWrapper = new QueryWrapper<PurchaseEntity>();
+
+        String key = (String) params.get("key");
+        if(StringUtils.isNotEmpty(key)){
+            queryWrapper.and(w->{
+                w.like("id",key).or().like("assignee_id",key).or().
+                        like("assignee_name",key);
+            });
+        }
+
+        String status = (String) params.get("status");
+        if(StringUtils.isNotEmpty(status)){
+            queryWrapper.eq("status",status);
+        }
+
+        IPage<PurchaseEntity> page = this.page(
+                new Query<PurchaseEntity>().getPage(params),
+                queryWrapper
         );
 
         return new PageUtils(page);

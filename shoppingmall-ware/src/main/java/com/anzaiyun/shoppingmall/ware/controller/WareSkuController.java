@@ -33,11 +33,12 @@ public class WareSkuController {
 
     /**
      * 列表
+     * 带条件查询 http://localhost:88/api/ware/waresku/list?t=1614738566186&page=1&limit=10&skuId=123&wareId=3
      */
     @RequestMapping("/list")
     //@RequiresPermissions("ware:waresku:list")
     public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = wareSkuService.queryPage(params);
+        PageUtils page = wareSkuService.queryPageByCondition(params);
 
         return R.ok().put("page", page);
     }

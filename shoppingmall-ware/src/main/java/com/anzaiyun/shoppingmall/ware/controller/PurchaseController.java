@@ -2,15 +2,14 @@ package com.anzaiyun.shoppingmall.ware.controller;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.anzaiyun.shoppingmall.ware.vo.MergeVo;
+import com.anzaiyun.shoppingmall.ware.vo.PurchaseDoneVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.anzaiyun.shoppingmall.ware.entity.PurchaseEntity;
 import com.anzaiyun.shoppingmall.ware.service.PurchaseService;
@@ -88,6 +87,56 @@ public class PurchaseController {
     //@RequiresPermissions("ware:purchase:delete")
     public R delete(@RequestBody Long[] ids){
 		purchaseService.removeByIds(Arrays.asList(ids));
+
+        return R.ok();
+    }
+
+    /**
+     * 合并采购单，查询未领取的采购需求
+     * http://localhost:88/api/ware/purchase/unreceive/list?t=1614774299330
+     */
+    @RequestMapping("/unreceive/list")
+    //@RequiresPermissions("ware:purchase:list")
+    public R unreceiveList(@RequestParam Map<String, Object> params){
+        PageUtils page = purchaseService.queryPageUnreceivePurchase(params);
+
+        return R.ok().put("page", page);
+    }
+
+    /**
+     * 合并采购单，合并采购需求
+     * http://localhost:88/api/ware/purchase/merge
+     */
+    @PostMapping("/merge")
+    //@RequiresPermissions("ware:purchase:list")
+    public R merge(@RequestBody MergeVo mergeVo){
+
+        purchaseService.mergePurchase(mergeVo);
+        return R.ok();
+    }
+
+    /**
+     * 采购人员接取采购单
+     * http://localhost:88/api/ware/purchase/recived
+     */
+    @PostMapping("/recived")
+    //@RequiresPermissions("ware:purchase:list")
+    public R recived(@RequestBody List<Long> purchaseIds){
+
+        purchaseService.recivePurchase(purchaseIds);
+
+        return R.ok();
+    }
+
+    /**
+     * 采购人员完成采购单
+     * http://localhost:88/api/ware/purchase/done
+     */
+    @PostMapping("/done")
+    //@RequiresPermissions("ware:purchase:list")
+    public R done(@RequestBody PurchaseDoneVo purchaseDoneVo){
+
+        purchaseService.donePurchase(purchaseDoneVo);
 
         return R.ok();
     }

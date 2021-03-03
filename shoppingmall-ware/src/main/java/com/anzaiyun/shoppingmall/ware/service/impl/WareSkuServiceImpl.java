@@ -38,7 +38,7 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
             });
         }
 
-        String wareId = (String) params.get("ware_id");
+        String wareId = (String) params.get("wareId");
         if(!StringUtils.isEmpty(wareId) && !"0".equalsIgnoreCase(wareId)){
             queryWrapper.and(w->{
                 w.eq("ware_id",wareId);

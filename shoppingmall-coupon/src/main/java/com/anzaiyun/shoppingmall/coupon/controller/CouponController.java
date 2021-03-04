@@ -44,11 +44,12 @@ public class CouponController {
 
     /**
      * 列表
+     * http://localhost:88/api/coupon/coupon/list?t=1614847322760&page=1&limit=10&key=2
      */
     @RequestMapping("/list")
     //@RequiresPermissions("coupon:coupon:list")
     public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = couponService.queryPage(params);
+        PageUtils page = couponService.queryPageByCondition(params);
 
         return R.ok().put("page", page);
     }

@@ -26,4 +26,17 @@ public class CouponServiceImpl extends ServiceImpl<CouponDao, CouponEntity> impl
         return new PageUtils(page);
     }
 
+    @Override
+    public PageUtils queryPageByCondition(Map<String, Object> params) {
+        String key = (String) params.get("key");
+        QueryWrapper<CouponEntity> queryWrapper = new QueryWrapper<CouponEntity>();
+        queryWrapper.eq("id",key).or().like("coupon_name",key);
+        IPage<CouponEntity> page = this.page(
+                new Query<CouponEntity>().getPage(params),
+                queryWrapper
+        );
+
+        return new PageUtils(page);
+    }
+
 }

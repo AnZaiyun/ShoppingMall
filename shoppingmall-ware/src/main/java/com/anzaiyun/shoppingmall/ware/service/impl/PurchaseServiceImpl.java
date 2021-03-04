@@ -2,6 +2,7 @@ package com.anzaiyun.shoppingmall.ware.service.impl;
 
 import com.anzaiyun.shoppingmall.ware.entity.PurchaseDetailEntity;
 import com.anzaiyun.shoppingmall.ware.entity.WareSkuEntity;
+import com.anzaiyun.shoppingmall.ware.fegin.ProductFeginService;
 import com.anzaiyun.shoppingmall.ware.service.PurchaseDetailService;
 import com.anzaiyun.shoppingmall.ware.service.WareSkuService;
 import com.anzaiyun.shoppingmall.ware.vo.DoneItem;
@@ -38,6 +39,9 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, PurchaseEntity
 
     @Autowired
     WareSkuService wareSkuService;
+
+    @Autowired
+    ProductFeginService productFeginService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -104,8 +108,8 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, PurchaseEntity
             purchaseId = purchaseEntity.getId();
         }else {
             PurchaseEntity purchaseEntity = this.getById(purchaseId);
-            if (purchaseEntity.getStatus() != 0){
-                //对于非新建状态的采购单不做新建操作，这一点应该由前台进行校验
+            if (purchaseEntity.getStatus() != 0 && purchaseEntity.getStatus() != 1){
+                //对于非新建且非已分配状态的采购单不做更新操作，这一点应该由前台进行校验
                 return;
             }
         }
@@ -157,6 +161,7 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, PurchaseEntity
         //改变采购单状态
         @NotNull Long id = purchaseDoneVo.getId();
         PurchaseEntity purchaseEntity = this.getById(id);
+        purchaseEntity.setStatus(3);
         List<DoneItem> doneItems = purchaseDoneVo.getDoneItems();
         //如果关联的采购需求中有一项没完成，则整个采购单的状态置为异常
         doneItems.forEach(doneItem -> {
@@ -188,8 +193,8 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, PurchaseEntity
                     wareSkuEntity = new WareSkuEntity();
                     //仓库存储为空，需要新建一个存储
                     wareSkuEntity.setSkuId(skuId);
-                    //TODO 需要调用product的微服务，获取sku的名字
-                    wareSkuEntity.setSkuName("");
+                    String skuInfoName = (String) productFeginService.getSkuinfo(skuId).get("skuInfoName");
+                    wareSkuEntity.setSkuName(skuInfoName);
                     wareSkuEntity.setStock(purchaseDetailEntity.getSkuNum());
                     wareSkuEntity.setWareId(wareId);
                     wareSkuEntity.setStockLocked(0);

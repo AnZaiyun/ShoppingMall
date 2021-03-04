@@ -56,6 +56,17 @@ public class SkuInfoController {
     }
 
     /**
+     * 信息
+     */
+    @RequestMapping("/getSkuinfo")
+    //@RequiresPermissions("product:skuinfo:info")
+    public R getSkuinfo(@RequestBody Long skuId){
+        SkuInfoEntity skuInfo = skuInfoService.getById(skuId);
+
+        return R.ok().put("skuInfoName", skuInfo.getSkuName());
+    }
+
+    /**
      * 保存
      */
     @RequestMapping("/save")

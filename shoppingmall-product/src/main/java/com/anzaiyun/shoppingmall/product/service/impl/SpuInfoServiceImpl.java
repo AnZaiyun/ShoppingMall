@@ -2,8 +2,11 @@ package com.anzaiyun.shoppingmall.product.service.impl;
 
 import com.anzaiyun.common.to.SkuReductionAndLadderTo;
 import com.anzaiyun.common.to.SpuBondsTo;
+import com.anzaiyun.common.to.es.SkuEsModelTo;
+import com.anzaiyun.common.utils.R;
 import com.anzaiyun.shoppingmall.product.entity.*;
 import com.anzaiyun.shoppingmall.product.fegin.CouponFeginService;
+import com.anzaiyun.shoppingmall.product.fegin.WareFeginService;
 import com.anzaiyun.shoppingmall.product.service.*;
 import com.anzaiyun.shoppingmall.product.vo.*;
 import org.apache.commons.lang.StringUtils;
@@ -47,6 +50,18 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
 
     @Autowired
     SkuSaleAttrValueService skuSaleAttrValueService;
+
+    @Autowired
+    BrandService brandService;
+
+    @Autowired
+    CategoryService categoryService;
+
+    @Autowired
+    AttrService attrService;
+
+    @Autowired
+    WareFeginService wareFeginService;
 
     /**
      * 远程调用服务
@@ -191,6 +206,81 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         );
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public void upSpu(Long spuId) {
+
+        //组装需要的数据
+
+        //查询sku所有可以被检索的规格属性信息
+        List<ProductAttrValueEntity> productAttrValueList = productAttrValueService.getBySpuId(spuId);
+        //获取所有spu包含的给规格属性id
+        List<Long> attrIdList = productAttrValueList.stream().map(attr -> {
+            return attr.getAttrId();
+        }).collect(Collectors.toList());
+        //根据传入的规格属性id列表，获取所有可被检索的规格属性id
+        List<Long> searchAttrIdList = attrService.getSearchAttrIdById(attrIdList);
+        //spu信息中的属性id如果属于可被检索的id，则返回SkuEsModelTo.attr用于es保存
+        List<SkuEsModelTo.Attr> collect1 = productAttrValueList.stream().filter(item -> {
+            return searchAttrIdList.contains(item.getAttrId());
+        }).map(attr -> {
+            SkuEsModelTo.Attr attr1 = new SkuEsModelTo.Attr();
+            BeanUtils.copyProperties(attr, attr1);
+            return attr1;
+        }).collect(Collectors.toList());
+
+        //查询sku所有可以被检索的规格属性信息 这里其实也可以多表关联查询，直接写sql返回结果，这样只用调用一个方法即可
+        // select a.* from pms_attr a,pms_product_attr_value b
+        // where a.attr_id = b.attr_id and b.spu_id = #{spuId} and a.search_type = 1
+
+        //查出当前spuid对应的所有sku信息
+        List<SkuInfoEntity> skuList = skuInfoService.getSkuInfoBySpuId(spuId);
+
+        List<Long> skuIds = skuList.stream().map(sku -> sku.getSkuId()).collect(Collectors.toList());
+        //发送远程调用查询是否有库存，hasStock
+        Map<Long, Boolean> skuStockMap = null;
+        try {
+            R<List<SkuHasStockVo>> listR = wareFeginService.hasSkuStock(skuIds);
+            skuStockMap = listR.getData().stream().collect(Collectors.toMap(SkuHasStockVo::getSkuId, item -> item.getHasStock()));
+
+        }catch (Exception e){
+            log.error("库存服务查询失败：{}",e);
+        }
+
+
+        Map<Long, Boolean> finalSkuStockMap = skuStockMap;
+        List<SkuEsModelTo> collect = skuList.stream().map(sku -> {
+            SkuEsModelTo skuEsModel = new SkuEsModelTo();
+            BeanUtils.copyProperties(sku,skuEsModel);
+            skuEsModel.setSkyPrice(sku.getPrice());
+            skuEsModel.setSkuImg(sku.getSkuDefaultImg());
+
+            //设置库存信息
+            if (finalSkuStockMap == null){
+                skuEsModel.setHasStock(false);
+            }else {
+                skuEsModel.setHasStock(finalSkuStockMap.get(sku.getSkuId()));
+            }
+
+            //热度评分，默认置零
+            skuEsModel.setHotScore(0L);
+            //查询品牌名字和图片
+            BrandEntity brand = brandService.getById(skuEsModel.getBrandId());
+            skuEsModel.setBrandName(brand.getName());
+            skuEsModel.setBrandImg(brand.getLogo());
+
+            CategoryEntity category = categoryService.getById(skuEsModel.getCatalogId());
+            skuEsModel.setCatalogName(category.getName());
+
+            //设置规格属性信息
+            skuEsModel.setAttrs(collect1);
+
+            return skuEsModel;
+        }).collect(Collectors.toList());
+
+        //发送远程请求，数据保存到es
+
     }
 
 }

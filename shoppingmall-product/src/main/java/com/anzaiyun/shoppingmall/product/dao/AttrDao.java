@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * 商品属性
  * 
@@ -16,4 +18,6 @@ import org.apache.ibatis.annotations.Param;
 public interface AttrDao extends BaseMapper<AttrEntity> {
 
     void updateAttrGroupIdByAttrId(@Param("attrId") Long attrId, @Param("attrGroupId") Long attrGroupId);
+
+    List<Long> getSearchAttrIdById(@Param("attrIdList") List<Long> attrIdList);
 }

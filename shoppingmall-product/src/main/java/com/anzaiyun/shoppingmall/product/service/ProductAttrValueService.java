@@ -1,5 +1,7 @@
 package com.anzaiyun.shoppingmall.product.service;
 
+import com.anzaiyun.common.to.es.SkuEsModelTo;
+import com.anzaiyun.shoppingmall.product.vo.Attr;
 import com.anzaiyun.shoppingmall.product.vo.BaseAttrs;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.anzaiyun.common.utils.PageUtils;
@@ -22,5 +24,7 @@ public interface ProductAttrValueService extends IService<ProductAttrValueEntity
     void saveBaseAttrs(Long id, List<BaseAttrs> baseAttrs);
 
     List<ProductAttrValueEntity> getBySpuId(Long spuId);
+
+    List<Attr> getSearchAttrBySpuId(Long spuId);
 }
 

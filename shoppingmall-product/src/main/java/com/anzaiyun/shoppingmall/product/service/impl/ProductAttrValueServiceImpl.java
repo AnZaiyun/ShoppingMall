@@ -1,6 +1,8 @@
 package com.anzaiyun.shoppingmall.product.service.impl;
 
+import com.anzaiyun.common.to.es.SkuEsModelTo;
 import com.anzaiyun.shoppingmall.product.service.AttrService;
+import com.anzaiyun.shoppingmall.product.vo.Attr;
 import com.anzaiyun.shoppingmall.product.vo.AttrRespVo;
 import com.anzaiyun.shoppingmall.product.vo.BaseAttrs;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +59,13 @@ public class ProductAttrValueServiceImpl extends ServiceImpl<ProductAttrValueDao
     public List<ProductAttrValueEntity> getBySpuId(Long spuId) {
         List<ProductAttrValueEntity> productAttrValueList = this.list(new QueryWrapper<ProductAttrValueEntity>().eq("spu_id", spuId));
         return productAttrValueList;
+    }
+
+    @Override
+    public List<Attr> getSearchAttrBySpuId(Long spuId) {
+        List<Attr> searchAttr = this.baseMapper.getSearchAttrBySpuId(spuId);
+
+        return searchAttr;
     }
 
 }

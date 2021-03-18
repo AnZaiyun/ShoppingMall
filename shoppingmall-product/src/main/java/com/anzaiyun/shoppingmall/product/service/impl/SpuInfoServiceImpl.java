@@ -6,6 +6,7 @@ import com.anzaiyun.common.to.es.SkuEsModelTo;
 import com.anzaiyun.common.utils.R;
 import com.anzaiyun.shoppingmall.product.entity.*;
 import com.anzaiyun.shoppingmall.product.fegin.CouponFeginService;
+import com.anzaiyun.shoppingmall.product.fegin.SearchFeginService;
 import com.anzaiyun.shoppingmall.product.fegin.WareFeginService;
 import com.anzaiyun.shoppingmall.product.service.*;
 import com.anzaiyun.shoppingmall.product.vo.*;
@@ -62,6 +63,9 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
 
     @Autowired
     WareFeginService wareFeginService;
+
+    @Autowired
+    SearchFeginService searchFeginService;
 
     /**
      * 远程调用服务
@@ -233,6 +237,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         //查询sku所有可以被检索的规格属性信息 这里其实也可以多表关联查询，直接写sql返回结果，这样只用调用一个方法即可
         // select a.* from pms_attr a,pms_product_attr_value b
         // where a.attr_id = b.attr_id and b.spu_id = #{spuId} and a.search_type = 1
+        List<Attr> searchAttr = productAttrValueService.getSearchAttrBySpuId(spuId);
 
         //查出当前spuid对应的所有sku信息
         List<SkuInfoEntity> skuList = skuInfoService.getSkuInfoBySpuId(spuId);
@@ -250,7 +255,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
 
 
         Map<Long, Boolean> finalSkuStockMap = skuStockMap;
-        List<SkuEsModelTo> collect = skuList.stream().map(sku -> {
+        List<SkuEsModelTo> skuEsModelToList = skuList.stream().map(sku -> {
             SkuEsModelTo skuEsModel = new SkuEsModelTo();
             BeanUtils.copyProperties(sku,skuEsModel);
             skuEsModel.setSkyPrice(sku.getPrice());
@@ -280,7 +285,18 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         }).collect(Collectors.toList());
 
         //发送远程请求，数据保存到es
+        System.out.println(skuEsModelToList); //打印检查
 
+        try {
+            searchFeginService.upProduct(skuEsModelToList);
+        }catch (Exception e){
+            log.error("检索服务调用失败：{}",e);
+        }
+
+        //更新商品状态为上架
+        SpuInfoEntity spuInfoEntity = this.baseMapper.selectById(spuId);
+        spuInfoEntity.setPublishStatus(1);
+        this.baseMapper.updateById(spuInfoEntity);
     }
 
 }

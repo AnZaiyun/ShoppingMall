@@ -13,7 +13,7 @@
         <result property="stockLocked" column="stock_locked"/>
     </resultMap>
     <select id="getSkuTotalStock" resultType="java.lang.Long">
-        select sum(stock-stock_locked) from `wms_ware_sku` where sku_id = #{sku}
+        select ifnull(sum(stock-stock_locked),0) from `wms_ware_sku` where sku_id = #{sku}
     </select>
 
 

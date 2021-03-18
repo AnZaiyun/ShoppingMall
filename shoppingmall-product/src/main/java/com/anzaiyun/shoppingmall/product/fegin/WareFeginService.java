@@ -12,5 +12,5 @@ import java.util.List;
 public interface WareFeginService {
 
     @PostMapping("/ware/waresku/hasStock")
-    R<List<SkuHasStockVo>> hasSkuStock(@RequestBody List<Long> skuIds);
+    R hasSkuStock(@RequestBody List<Long> skuIds);
 }

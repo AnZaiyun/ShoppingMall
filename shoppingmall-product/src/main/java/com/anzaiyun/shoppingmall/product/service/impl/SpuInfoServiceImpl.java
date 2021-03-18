@@ -1,5 +1,7 @@
 package com.anzaiyun.shoppingmall.product.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.anzaiyun.common.to.SkuReductionAndLadderTo;
 import com.anzaiyun.common.to.SpuBondsTo;
 import com.anzaiyun.common.to.es.SkuEsModelTo;
@@ -246,8 +248,14 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         //发送远程调用查询是否有库存，hasStock
         Map<Long, Boolean> skuStockMap = null;
         try {
-            R<List<SkuHasStockVo>> listR = wareFeginService.hasSkuStock(skuIds);
-            skuStockMap = listR.getData().stream().collect(Collectors.toMap(SkuHasStockVo::getSkuId, item -> item.getHasStock()));
+            R listR = wareFeginService.hasSkuStock(skuIds);
+            Object data = listR.get("data");
+            String s = JSON.toJSONString(data);
+            TypeReference<List<SkuHasStockVo>> typeReference = new TypeReference<List<SkuHasStockVo>>() {
+
+            };
+            List<SkuHasStockVo> skuHasStockVos = JSON.parseObject(s, typeReference);
+            skuStockMap = skuHasStockVos.stream().collect(Collectors.toMap(SkuHasStockVo::getSkuId, item -> item.getHasStock()));
 
         }catch (Exception e){
             log.error("库存服务查询失败：{}",e);

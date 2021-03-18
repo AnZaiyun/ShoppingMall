@@ -22,5 +22,14 @@
         where attr_id = #{attrId}
     </update>
 
+    <select id="getSearchAttrIdById" resultType="java.lang.Long">
+        select attr_id from `pms_attr`
+        where search_type = 1 and
+        attr_id in
+        <foreach collection="attrIdList" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </select>
+
 
 </mapper>

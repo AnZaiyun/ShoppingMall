@@ -1,7 +1,12 @@
 package com.anzaiyun.shoppingmall.ware.service.impl;
 
+import com.anzaiyun.shoppingmall.ware.vo.SkuHasStockVo;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -51,6 +56,21 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
         );
 
         return new PageUtils(page);
+
+    }
+
+    @Override
+    public List<SkuHasStockVo> hasSkuStock(List<Long> skuIds) {
+
+        List<SkuHasStockVo> voList = skuIds.stream().map(sku -> {
+            SkuHasStockVo vo = new SkuHasStockVo();
+            Long totalStock = this.baseMapper.getSkuTotalStock(sku);
+            vo.setHasStock(totalStock > 0);
+            vo.setSkuId(sku);
+            return vo;
+        }).collect(Collectors.toList());
+
+        return voList;
 
     }
 

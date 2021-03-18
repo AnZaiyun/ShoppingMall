@@ -90,4 +90,17 @@ public class SpuInfoController {
         return R.ok();
     }
 
+    /**
+     * http://localhost:88/api/product/spuinfo/9/up
+     * 商品上架
+     * @return
+     */
+    @RequestMapping("/{spuId}/up")
+    public R upProduct(@PathVariable("spuId") Long spuId){
+
+        spuInfoService.upSpu(spuId);
+
+        return R.ok();
+    }
+
 }

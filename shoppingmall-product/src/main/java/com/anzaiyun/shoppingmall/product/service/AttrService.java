@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.anzaiyun.common.utils.PageUtils;
 import com.anzaiyun.shoppingmall.product.entity.AttrEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,5 +28,11 @@ public interface AttrService extends IService<AttrEntity> {
 
     void updateAttr(AttrVo attr);
 
+    /**
+     * 根据id，返回可被检索的属性的id
+     * @param attrIdList
+     * @return
+     */
+    List<Long> getSearchAttrIdById(List<Long> attrIdList);
 }
 

@@ -1,4 +1,4 @@
-package com.anzaiyun.shoppingmall.product.controller;
+package com.anzaiyun.shoppingmall.product.controller.serv;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -11,33 +11,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.anzaiyun.shoppingmall.product.entity.SpuCommentEntity;
-import com.anzaiyun.shoppingmall.product.service.SpuCommentService;
+import com.anzaiyun.shoppingmall.product.entity.ProductAttrValueEntity;
+import com.anzaiyun.shoppingmall.product.service.ProductAttrValueService;
 import com.anzaiyun.common.utils.PageUtils;
 import com.anzaiyun.common.utils.R;
 
 
 
 /**
- * 商品评价
+ * spu属性值
  *
  * @author anzaiyun
  * @email anzaiyun@gmail.com
  * @date 2020-10-27 23:22:05
  */
 @RestController
-@RequestMapping("product/spucomment")
-public class SpuCommentController {
+@RequestMapping("product/productattrvalue")
+public class ProductAttrValueController {
     @Autowired
-    private SpuCommentService spuCommentService;
+    private ProductAttrValueService productAttrValueService;
 
     /**
      * 列表
      */
     @RequestMapping("/list")
-    //@RequiresPermissions("product:spucomment:list")
+    //@RequiresPermissions("product:productattrvalue:list")
     public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = spuCommentService.queryPage(params);
+        PageUtils page = productAttrValueService.queryPage(params);
 
         return R.ok().put("page", page);
     }
@@ -47,20 +47,20 @@ public class SpuCommentController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    //@RequiresPermissions("product:spucomment:info")
+    //@RequiresPermissions("product:productattrvalue:info")
     public R info(@PathVariable("id") Long id){
-		SpuCommentEntity spuComment = spuCommentService.getById(id);
+		ProductAttrValueEntity productAttrValue = productAttrValueService.getById(id);
 
-        return R.ok().put("spuComment", spuComment);
+        return R.ok().put("productAttrValue", productAttrValue);
     }
 
     /**
      * 保存
      */
     @RequestMapping("/save")
-    //@RequiresPermissions("product:spucomment:save")
-    public R save(@RequestBody SpuCommentEntity spuComment){
-		spuCommentService.save(spuComment);
+    //@RequiresPermissions("product:productattrvalue:save")
+    public R save(@RequestBody ProductAttrValueEntity productAttrValue){
+		productAttrValueService.save(productAttrValue);
 
         return R.ok();
     }
@@ -69,9 +69,9 @@ public class SpuCommentController {
      * 修改
      */
     @RequestMapping("/update")
-    //@RequiresPermissions("product:spucomment:update")
-    public R update(@RequestBody SpuCommentEntity spuComment){
-		spuCommentService.updateById(spuComment);
+    //@RequiresPermissions("product:productattrvalue:update")
+    public R update(@RequestBody ProductAttrValueEntity productAttrValue){
+		productAttrValueService.updateById(productAttrValue);
 
         return R.ok();
     }
@@ -80,9 +80,9 @@ public class SpuCommentController {
      * 删除
      */
     @RequestMapping("/delete")
-    //@RequiresPermissions("product:spucomment:delete")
+    //@RequiresPermissions("product:productattrvalue:delete")
     public R delete(@RequestBody Long[] ids){
-		spuCommentService.removeByIds(Arrays.asList(ids));
+		productAttrValueService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
     }

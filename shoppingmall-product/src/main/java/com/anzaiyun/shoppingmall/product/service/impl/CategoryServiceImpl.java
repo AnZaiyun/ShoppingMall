@@ -114,6 +114,13 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
         categoryBrandRelationService.updateCategory(category.getCatId(),category.getName());
     }
 
+    @Override
+    public List<CategoryEntity> getCategoryByLevel(Long catLevel) {
+
+        List<CategoryEntity> categoryEntityList = this.list(new QueryWrapper<CategoryEntity>().eq("cat_level", catLevel));
+        return categoryEntityList;
+    }
+
     private  List<Long> findParentPath(Long catelogId,List<Long> paths){
         paths.add(catelogId);
         CategoryEntity byId = this.getById(catelogId);

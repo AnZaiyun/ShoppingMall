@@ -1,4 +1,4 @@
-package com.anzaiyun.shoppingmall.product.controller;
+package com.anzaiyun.shoppingmall.product.controller.serv;
 
 import java.util.Arrays;
 import java.util.List;

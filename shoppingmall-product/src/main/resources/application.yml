@@ -18,6 +18,9 @@ spring:
   jackson:
     date-format: yyyy-MM-dd hh:mm:ss
     time-zone: GMT+8
+  thymeleaf:
+    cache: false
+
 #    alicloud:
 #      access-key: LTAI4Fzqdnk1guSMpuokSQZ5
 #      secret-key: tDNe03mZBo8GjIA4ZDSHiGFoHntsay

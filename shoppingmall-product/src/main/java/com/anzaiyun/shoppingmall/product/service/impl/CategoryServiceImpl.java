@@ -139,8 +139,9 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
                 }
             }
             Catalog2JsonVo catalog2JsonVo = new Catalog2JsonVo(catalog2.getParentCid(), catalog3Vos, level2Id, catalog2.getName());
-            if (catalogJsonVoMap.containsKey(catalog2.getParentCid())){
-                List<Catalog2JsonVo> catalog2JsonVos = catalogJsonVoMap.get(catalog2.getParentCid());
+
+            if (catalogJsonVoMap.containsKey(catalog2.getParentCid().toString())){
+                List<Catalog2JsonVo> catalog2JsonVos = catalogJsonVoMap.get(catalog2.getParentCid().toString());
                 catalog2JsonVos.add(catalog2JsonVo);
                 catalogJsonVoMap.put(catalog2.getParentCid().toString(),catalog2JsonVos);
             }else {

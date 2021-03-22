@@ -53,6 +53,13 @@
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
+        <!-- 前段页面修改，不重启项目，但是要重新编译 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+
 <!--        <dependency>-->
 <!--            <groupId>com.aliyun.oss</groupId>-->
 <!--            <artifactId>aliyun-sdk-oss</artifactId>-->

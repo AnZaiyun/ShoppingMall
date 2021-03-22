@@ -1,6 +1,7 @@
 package com.anzaiyun.shoppingmall.product.service.impl;
 
 import com.anzaiyun.shoppingmall.product.service.CategoryBrandRelationService;
+import com.anzaiyun.shoppingmall.product.vo.Catalog2JsonVo;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -119,6 +120,37 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
 
         List<CategoryEntity> categoryEntityList = this.list(new QueryWrapper<CategoryEntity>().eq("cat_level", catLevel));
         return categoryEntityList;
+    }
+
+    @Override
+    public Map<String, List<Catalog2JsonVo>> getCatalogJson() {
+        Map<String, List<Catalog2JsonVo>> catalogJsonVoMap = new HashMap<>();
+        //获取2级分类
+        List<CategoryEntity> categoryLevel2 = this.getCategoryByLevel(2L);
+        //获取3级分类
+        List<CategoryEntity> categoryLevel3 = this.getCategoryByLevel(3L);
+
+        for (CategoryEntity catalog2:categoryLevel2) {
+            Long level2Id = catalog2.getCatId();
+            List<Catalog2JsonVo.Catalog3Vo> catalog3Vos = new ArrayList<>();
+            for (CategoryEntity catalog3:categoryLevel3){
+                if (catalog3.getParentCid().equals(level2Id)){
+                    catalog3Vos.add(new Catalog2JsonVo.Catalog3Vo(level2Id,catalog3.getCatId(),catalog3.getName()));
+                }
+            }
+            Catalog2JsonVo catalog2JsonVo = new Catalog2JsonVo(catalog2.getParentCid(), catalog3Vos, level2Id, catalog2.getName());
+            if (catalogJsonVoMap.containsKey(catalog2.getParentCid())){
+                List<Catalog2JsonVo> catalog2JsonVos = catalogJsonVoMap.get(catalog2.getParentCid());
+                catalog2JsonVos.add(catalog2JsonVo);
+                catalogJsonVoMap.put(catalog2.getParentCid().toString(),catalog2JsonVos);
+            }else {
+                List<Catalog2JsonVo> catalog2JsonVos = new ArrayList<>();
+                catalog2JsonVos.add(catalog2JsonVo);
+                catalogJsonVoMap.put(catalog2.getParentCid().toString(),catalog2JsonVos);
+            }
+
+        }
+        return catalogJsonVoMap;
     }
 
     private  List<Long> findParentPath(Long catelogId,List<Long> paths){

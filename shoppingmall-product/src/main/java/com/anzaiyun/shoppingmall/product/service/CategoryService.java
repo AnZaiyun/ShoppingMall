@@ -1,5 +1,6 @@
 package com.anzaiyun.shoppingmall.product.service;
 
+import com.anzaiyun.shoppingmall.product.vo.Catalog2JsonVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.anzaiyun.common.utils.PageUtils;
 import com.anzaiyun.shoppingmall.product.entity.CategoryEntity;
@@ -33,5 +34,11 @@ public interface CategoryService extends IService<CategoryEntity> {
     void updateCascade(CategoryEntity category);
 
     List<CategoryEntity> getCategoryByLevel(Long catLevel);
+
+    /**
+     * index.html页面获取所有的分类信息，返回数据格式为index/json/catalog.json中的格式
+     * @return
+     */
+    Map<String, List<Catalog2JsonVo>> getCatalogJson();
 }
 

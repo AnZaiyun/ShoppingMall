@@ -20,6 +20,9 @@ spring:
     time-zone: GMT+8
   thymeleaf:
     cache: false
+  redis:
+    host: 192.168.56.10
+    port: 6379
 
 #    alicloud:
 #      access-key: LTAI4Fzqdnk1guSMpuokSQZ5

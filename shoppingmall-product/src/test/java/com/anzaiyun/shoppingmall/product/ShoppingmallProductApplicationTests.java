@@ -8,16 +8,22 @@ import com.anzaiyun.shoppingmall.product.service.BrandService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.UUID;
 
 @SpringBootTest
 class ShoppingmallProductApplicationTests {
 
     @Autowired
     BrandService brandService;
+
+    @Autowired
+    StringRedisTemplate stringRedisTemplate;
 
 //    @Autowired
 //    OSSClient ossClient;
@@ -48,6 +54,15 @@ class ShoppingmallProductApplicationTests {
         brandEntity.setName("huawei");
         brandService.save(brandEntity);
         System.out.println("保存成功。。。");
+    }
+
+    @Test
+    void testStringRedisTemplate(){
+        ValueOperations<String, String> ops = stringRedisTemplate.opsForValue();
+        ops.set("hello","world_"+ UUID.randomUUID().toString());
+
+        String hello = ops.get("hello");
+        System.out.println(hello);
     }
 
 }

@@ -4,6 +4,8 @@ import com.anzaiyun.shoppingmall.product.dao.BrandDao;
 import com.anzaiyun.shoppingmall.product.dao.CategoryDao;
 import com.anzaiyun.shoppingmall.product.entity.BrandEntity;
 import com.anzaiyun.shoppingmall.product.entity.CategoryEntity;
+import com.anzaiyun.shoppingmall.product.service.BrandService;
+import com.anzaiyun.shoppingmall.product.service.CategoryService;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,9 +25,9 @@ import com.anzaiyun.shoppingmall.product.service.CategoryBrandRelationService;
 public class CategoryBrandRelationServiceImpl extends ServiceImpl<CategoryBrandRelationDao, CategoryBrandRelationEntity> implements CategoryBrandRelationService {
 
     @Autowired
-    BrandDao brandDao;
+    BrandService brandService;
     @Autowired
-    CategoryDao categoryDao;
+    CategoryService categoryService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -42,8 +44,8 @@ public class CategoryBrandRelationServiceImpl extends ServiceImpl<CategoryBrandR
         Long brandId = categoryBrandRelation.getBrandId();
         Long cateLogId = categoryBrandRelation.getCatelogId();
 
-        BrandEntity brandEntity =  brandDao.selectById(brandId);
-        CategoryEntity categoryEntity = categoryDao.selectById(cateLogId);
+        BrandEntity brandEntity =  brandService.getById(brandId);
+        CategoryEntity categoryEntity = categoryService.getById(cateLogId);
         categoryBrandRelation.setBrandName(brandEntity.getName());
         categoryBrandRelation.setCatelogName(categoryEntity.getName());
 

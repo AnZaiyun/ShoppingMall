@@ -58,7 +58,7 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {})
     public void saveAttr(AttrVo attr) {
         AttrEntity attrEntity = new AttrEntity();
         BeanUtils.copyProperties(attr,attrEntity);

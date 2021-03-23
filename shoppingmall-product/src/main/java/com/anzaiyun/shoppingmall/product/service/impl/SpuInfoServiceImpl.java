@@ -86,7 +86,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {})
     public void saveSpuInfo(SpuSaveVo spuInfoVo) {
         //1、保存Spu基本信息 pms_spu_info
         SpuInfoEntity spuInfoEntity = new SpuInfoEntity();
@@ -160,7 +160,11 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
 
                 return skuSaleAttrValueEntity;
             }).collect(Collectors.toList());
-            skuSaleAttrValueService.saveBatch(skuAttrCollect);
+            try{
+                skuSaleAttrValueService.saveBatch(skuAttrCollect);
+            }catch (Exception e){
+                log.error("sku销售信息保存失败:{}",e);
+            }
 
             //6.4、sku的优惠，满减信息 shoppingmall_sms.sms_sku_ladder、sms_sku_full_reduction
             SkuReductionAndLadderTo skuReductionAndLadderTo = new SkuReductionAndLadderTo();
@@ -169,8 +173,6 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
             if (skuReductionAndLadderTo.getFullCount() > 0 || skuReductionAndLadderTo.getFullPrice().compareTo(new BigDecimal('0')) == 1){
                 couponFeginService.saveSkuReductionAndLadder(skuReductionAndLadderTo);
             }
-
-
         });
 
     }
@@ -186,9 +188,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
 
         String key = (String) params.get("key");
         if(StringUtils.isNotEmpty(key)){
-            queryWrapper.and((w)->{
-                w.eq("id",key).or().like("spu_name",key).or().like("spu_description",key);
-            });
+            queryWrapper.and((w)-> w.eq("id",key).or().like("spu_name",key).or().like("spu_description",key));
         }
 
         String status = (String) params.get("status");
@@ -222,15 +222,11 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         //查询sku所有可以被检索的规格属性信息
         List<ProductAttrValueEntity> productAttrValueList = productAttrValueService.getBySpuId(spuId);
         //获取所有spu包含的给规格属性id
-        List<Long> attrIdList = productAttrValueList.stream().map(attr -> {
-            return attr.getAttrId();
-        }).collect(Collectors.toList());
+        List<Long> attrIdList = productAttrValueList.stream().map(attr -> attr.getAttrId()).collect(Collectors.toList());
         //根据传入的规格属性id列表，获取所有可被检索的规格属性id
         List<Long> searchAttrIdList = attrService.getSearchAttrIdById(attrIdList);
         //spu信息中的属性id如果属于可被检索的id，则返回SkuEsModelTo.attr用于es保存
-        List<SkuEsModelTo.Attr> collect1 = productAttrValueList.stream().filter(item -> {
-            return searchAttrIdList.contains(item.getAttrId());
-        }).map(attr -> {
+        List<SkuEsModelTo.Attr> collect1 = productAttrValueList.stream().filter(item -> searchAttrIdList.contains(item.getAttrId())).map(attr -> {
             SkuEsModelTo.Attr attr1 = new SkuEsModelTo.Attr();
             BeanUtils.copyProperties(attr, attr1);
             return attr1;
@@ -239,7 +235,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         //查询sku所有可以被检索的规格属性信息 这里其实也可以多表关联查询，直接写sql返回结果，这样只用调用一个方法即可
         // select a.* from pms_attr a,pms_product_attr_value b
         // where a.attr_id = b.attr_id and b.spu_id = #{spuId} and a.search_type = 1
-        List<Attr> searchAttr = productAttrValueService.getSearchAttrBySpuId(spuId);
+//        List<Attr> searchAttr = productAttrValueService.getSearchAttrBySpuId(spuId);
 
         //查出当前spuid对应的所有sku信息
         List<SkuInfoEntity> skuList = skuInfoService.getSkuInfoBySpuId(spuId);
@@ -250,13 +246,13 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         try {
             R listR = wareFeginService.hasSkuStock(skuIds);
             Object data = listR.get("data");
-            String s = JSON.toJSONString(data);
-            TypeReference<List<SkuHasStockVo>> typeReference = new TypeReference<List<SkuHasStockVo>>() {
-
-            };
-            List<SkuHasStockVo> skuHasStockVos = JSON.parseObject(s, typeReference);
-            skuStockMap = skuHasStockVos.stream().collect(Collectors.toMap(SkuHasStockVo::getSkuId, item -> item.getHasStock()));
-
+            if(data != null) {
+                String s = JSON.toJSONString(data);
+                TypeReference<List<SkuHasStockVo>> typeReference = new TypeReference<List<SkuHasStockVo>>() {
+                };
+                List<SkuHasStockVo> skuHasStockVos = JSON.parseObject(s, typeReference);
+                skuStockMap = skuHasStockVos.stream().collect(Collectors.toMap(SkuHasStockVo::getSkuId, item -> item.getHasStock()));
+            }
         }catch (Exception e){
             log.error("库存服务查询失败：{}",e);
         }
@@ -270,7 +266,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
             skuEsModel.setSkuImg(sku.getSkuDefaultImg());
 
             //设置库存信息
-            if (finalSkuStockMap == null){
+            if (finalSkuStockMap == null || finalSkuStockMap.size() ==0){
                 skuEsModel.setHasStock(false);
             }else {
                 skuEsModel.setHasStock(finalSkuStockMap.get(sku.getSkuId()));
@@ -292,19 +288,22 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
             return skuEsModel;
         }).collect(Collectors.toList());
 
-        //发送远程请求，数据保存到es
+
         System.out.println(skuEsModelToList); //打印检查
 
-        try {
-            searchFeginService.upProduct(skuEsModelToList);
-        }catch (Exception e){
-            log.error("检索服务调用失败：{}",e);
-        }
+        if(skuEsModelToList != null && skuEsModelToList.size() > 0) {
+            //发送远程请求，数据保存到es
+            try {
+                searchFeginService.upProduct(skuEsModelToList);
+            } catch (Exception e) {
+                log.error("检索服务调用失败：{}", e);
+            }
 
-        //更新商品状态为上架
-        SpuInfoEntity spuInfoEntity = this.baseMapper.selectById(spuId);
-        spuInfoEntity.setPublishStatus(1);
-        this.baseMapper.updateById(spuInfoEntity);
+            //更新商品状态为上架
+            SpuInfoEntity spuInfoEntity = this.baseMapper.selectById(spuId);
+            spuInfoEntity.setPublishStatus(1);
+            this.baseMapper.updateById(spuInfoEntity);
+        }
     }
 
 }

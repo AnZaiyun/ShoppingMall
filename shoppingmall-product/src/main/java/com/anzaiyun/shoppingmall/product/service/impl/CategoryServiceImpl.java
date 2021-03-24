@@ -6,9 +6,11 @@ import com.anzaiyun.shoppingmall.product.service.CategoryBrandRelationService;
 import com.anzaiyun.shoppingmall.product.vo.Catalog2JsonVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -154,9 +156,10 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
          */
         if(StringUtils.isEmpty(catalogJson)){
             //缓存中没有数据，则重新查库
-            catalogJsonFromDb = getCatalogJsonFromDb();
-            //将查到的数据放入缓存,缓存存的应该是JSON字符串
-            stringRedisTemplate.opsForValue().set("catalogJson", JSONObject.toJSONString(catalogJsonFromDb));
+            //本地式锁
+            //catalogJsonFromDb = getCatalogJsonFromDbAddLocalLock();
+            //分布式锁
+            catalogJsonFromDb = getCatalogJsonFromDbAddRedisLock();
         }else{
             //将json字符串转换成指定对象(反序列化)
             catalogJsonFromDb = JSONObject.parseObject(catalogJson,new TypeReference<Map<String, List<Catalog2JsonVo>>>(){});
@@ -165,12 +168,67 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
         return catalogJsonFromDb;
     }
 
-    public Map<String, List<Catalog2JsonVo>> getCatalogJsonFromDb() {
+    /**
+     * 加上redis的分布式锁
+     * @return
+     */
+    public Map<String, List<Catalog2JsonVo>> getCatalogJsonFromDbAddRedisLock() {
+
+        /**
+         * 对于每一个服务用相同的key进行上锁，分布式锁需要考虑以下情况
+         * 1)此处对redis缓存存值（上锁），如果不设置过期时间，此处上锁后，如果在服务的处理过程中出现异常，
+         * 锁将无法删除，其他的服务将一直等待锁，造成服务异常，因此需要设置过期时间
+         * 2）设置过期时间后，服务执行完会删除锁，此时会出现这种情况，服务的执行时间过长，超过了锁的过期时间，这时当前服务A的锁会自动删除
+         * 其他等待服务B则会获取到锁，再进行上锁过程，而这时当前服务A执行完毕进行解锁操作就会将其他服务B的锁删除，服务C获取到锁进行处理，
+         * 这时就可能出现异常，为了解决中情况，每个服务锁的value就应该是不一样的值，删除锁时需要判断锁属不属于当前服务
+         * 3)经过以上两种场景的考虑，删除锁操作很容易的想到删除前先获取锁，查看value是否和上锁时一致，如果一致再删除
+         * 但是这样会引申出以下这种问题：在高并发的场景下，获取锁时获取到了value，此时value与上锁时一致，但是因为网络延迟，服务A在接收到
+         * 这个value的过程中，服务A的锁恰好自动到期了，此时服务B获取到锁，并进行了加锁操作。服务A获取到过期的value后，判断通过，认为当前
+         * 的锁属于自己进行了删锁操作，此时就会将服务B的锁误删除。
+         * 为了解决这种情况，就需要使用lua脚本的方法，将判断与删除的逻辑一并发给redis，由redis来进行判断删除操作
+         * */
+        Map<String, List<Catalog2JsonVo>> catalogJsonFromDb = new HashMap<>();
+        String uuid = UUID.randomUUID().toString();
+        //设置上锁与过期时间应该是原子操作
+        Boolean lock = stringRedisTemplate.opsForValue().setIfAbsent("lock", uuid, 300, TimeUnit.SECONDS);
+        if (lock) {
+            //二次校验，如果缓存中已经有数据，则直接返回
+            String catalogJson = stringRedisTemplate.opsForValue().get("catalogJson");
+            try {
+                if (!StringUtils.isEmpty(catalogJson)) {
+                    //缓存不为空直接返回
+                    catalogJsonFromDb = JSONObject.parseObject(catalogJson, new TypeReference<Map<String, List<Catalog2JsonVo>>>() {
+                    });
+                } else {
+                    System.out.println("获取到分布式锁，查询数据库中。。。");
+                    catalogJsonFromDb = getCatalogJsonFromDb();
+                    stringRedisTemplate.opsForValue().set("catalogJson", JSONObject.toJSONString(catalogJsonFromDb));
+                }
+            }finally {
+                //删除锁，判断与删除应该是原子操作
+                String script = "if redis.call(\"get\",KEYS[1]) == ARGV[1] then\n" +
+                        "    return redis.call(\"del\",KEYS[1])\n" +
+                        "else\n" +
+                        "    return 0\n" +
+                        "end";
+                stringRedisTemplate.execute(new DefaultRedisScript<Integer>(script, Integer.class), Arrays.asList("lock"), uuid);
+
+            }
 
 
-        Map<String, List<Catalog2JsonVo>> catalogJsonVoMap = new HashMap<>();
-        List<CategoryEntity> categoryLevel2 = new ArrayList<>();
-        List<CategoryEntity> categoryLevel3 = new ArrayList<>();
+        }else {
+            //自旋调用
+            getCatalogJsonFromDbAddRedisLock();
+        }
+
+        return catalogJsonFromDb;
+    }
+
+    /**
+     * 加上本地锁
+     * @return
+     */
+    public Map<String, List<Catalog2JsonVo>> getCatalogJsonFromDbAddLocalLock() {
 
         //加锁，锁住所有线程
         //this锁是本地锁，只能锁住本地的服务，分布式场景需要分布式锁
@@ -180,12 +238,33 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
             if(!StringUtils.isEmpty(catalogJson)){
                 //缓存不为空直接返回
                 return JSONObject.parseObject(catalogJson,new TypeReference<Map<String, List<Catalog2JsonVo>>>(){});
+            }else {
+                System.out.println("获取到本地锁，查询数据库中。。。");
+                //查库，并将数据保存到redis中
+                Map<String, List<Catalog2JsonVo>> catalogJsonFromDb = getCatalogJsonFromDb();
+                stringRedisTemplate.opsForValue().set("catalogJson", JSONObject.toJSONString(catalogJsonFromDb));
+                return catalogJsonFromDb;
             }
-            //获取2级分类
-            categoryLevel2 = this.getCategoryByLevel(2L);
-            //获取3级分类
-            categoryLevel3 = this.getCategoryByLevel(3L);
+
         }
+
+
+        //将查到的数据放入缓存,缓存存的应该是JSON字符串，其实这一段放在这里是不恰当的，加锁时会判断缓存中有没有数据，没有就查库
+        //所以查库以及之后的逻辑都应该在库中进行，将数据处理好并将数据存入redis后，才可以解锁，不然还是会有多次查库
+        //stringRedisTemplate.opsForValue().set("catalogJson", JSONObject.toJSONString(catalogJsonVoMap));
+
+    }
+
+    public Map<String, List<Catalog2JsonVo>> getCatalogJsonFromDb(){
+
+        Map<String, List<Catalog2JsonVo>> catalogJsonVoMap = new HashMap<>();
+        List<CategoryEntity> categoryLevel2 = new ArrayList<>();
+        List<CategoryEntity> categoryLevel3 = new ArrayList<>();
+
+        //获取2级分类
+        categoryLevel2 = this.getCategoryByLevel(2L);
+        //获取3级分类
+        categoryLevel3 = this.getCategoryByLevel(3L);
 
         for (CategoryEntity catalog2:categoryLevel2) {
             Long level2Id = catalog2.getCatId();
@@ -208,6 +287,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
             }
 
         }
+
         return catalogJsonVoMap;
     }
 

@@ -158,7 +158,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
             //缓存中没有数据，则重新查库
             //本地式锁
             //catalogJsonFromDb = getCatalogJsonFromDbAddLocalLock();
-            //分布式锁
+            //分布式锁，因为上锁解锁，需要进行网络通信，所以分布式锁也会影响部分性能
             catalogJsonFromDb = getCatalogJsonFromDbAddRedisLock();
         }else{
             //将json字符串转换成指定对象(反序列化)

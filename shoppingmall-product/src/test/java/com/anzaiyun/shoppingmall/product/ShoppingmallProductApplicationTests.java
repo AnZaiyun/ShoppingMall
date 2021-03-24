@@ -3,9 +3,11 @@ package com.anzaiyun.shoppingmall.product;
 //import com.aliyun.oss.OSS;
 //import com.aliyun.oss.OSSClient;
 //import com.aliyun.oss.OSSClientBuilder;
+import com.anzaiyun.shoppingmall.product.config.ProductRedissonConfig;
 import com.anzaiyun.shoppingmall.product.entity.BrandEntity;
 import com.anzaiyun.shoppingmall.product.service.BrandService;
 import org.junit.jupiter.api.Test;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -13,6 +15,7 @@ import org.springframework.data.redis.core.ValueOperations;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
@@ -24,6 +27,9 @@ class ShoppingmallProductApplicationTests {
 
     @Autowired
     StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    ProductRedissonConfig productRedissonConfig;
 
 //    @Autowired
 //    OSSClient ossClient;
@@ -65,4 +71,9 @@ class ShoppingmallProductApplicationTests {
         System.out.println(hello);
     }
 
+    @Test
+    void testRedisson() throws IOException {
+        RedissonClient redisson = productRedissonConfig.redisson();
+        System.out.println(redisson);
+    }
 }

@@ -78,6 +78,13 @@
             <artifactId>jedis</artifactId>
         </dependency>
 
+        <!-- redisson提供了分布式锁和分布式对象等功能 -->
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson</artifactId>
+            <version>3.15.0</version>
+        </dependency>
+
 <!--        <dependency>-->
 <!--            <groupId>com.aliyun.oss</groupId>-->
 <!--            <artifactId>aliyun-sdk-oss</artifactId>-->

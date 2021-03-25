@@ -5,6 +5,7 @@ import com.alibaba.fastjson.TypeReference;
 import com.anzaiyun.shoppingmall.product.service.CategoryBrandRelationService;
 import com.anzaiyun.shoppingmall.product.vo.Catalog2JsonVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
@@ -128,6 +129,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
         categoryBrandRelationService.updateCategory(category.getCatId(),category.getName());
     }
 
+    @Cacheable(cacheNames = "{category}",key = "#root.method.toString()")
     @Override
     public List<CategoryEntity> getCategoryByLevel(Long catLevel) {
 

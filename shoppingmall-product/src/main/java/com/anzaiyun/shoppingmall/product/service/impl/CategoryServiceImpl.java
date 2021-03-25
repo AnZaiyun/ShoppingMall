@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.anzaiyun.shoppingmall.product.service.CategoryBrandRelationService;
 import com.anzaiyun.shoppingmall.product.vo.Catalog2JsonVo;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -40,6 +42,9 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
      */
     @Autowired
     StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    RedissonClient redisson;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -165,6 +170,31 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
         }else{
             //将json字符串转换成指定对象(反序列化)
             catalogJsonFromDb = JSONObject.parseObject(catalogJson,new TypeReference<Map<String, List<Catalog2JsonVo>>>(){});
+        }
+
+        return catalogJsonFromDb;
+    }
+
+    /**
+     * 加上redisson的分布式锁
+     * @return
+     */
+    public Map<String, List<Catalog2JsonVo>> getCatalogJsonFromDbAddRedissonLock() {
+        RLock lock = redisson.getLock("catalogJson-lock");
+        Map<String, List<Catalog2JsonVo>> catalogJsonFromDb = new HashMap<>();
+        String catalogJson = stringRedisTemplate.opsForValue().get("catalogJson");
+
+        if (StringUtils.isEmpty(catalogJson)){
+            lock.lock();
+            try {
+                catalogJsonFromDb = getCatalogJsonFromDb();
+                stringRedisTemplate.opsForValue().set("catalogJson", JSONObject.toJSONString(catalogJsonFromDb));
+            }finally {
+                lock.unlock();
+            }
+        }else {
+            catalogJsonFromDb = JSONObject.parseObject(catalogJson, new TypeReference<Map<String, List<Catalog2JsonVo>>>() {
+            }); 
         }
 
         return catalogJsonFromDb;

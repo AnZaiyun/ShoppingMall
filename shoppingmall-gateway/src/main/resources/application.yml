@@ -61,7 +61,12 @@ spring:
             - RewritePath=/api/search/(?<segment>.*),/$\{segment}
 
 #        注意该项配置需要放在最后，因为网关的配置是按照路由配置顺序来逐个扫描，找到符合规则的就会直接转发，不会再向下寻找
-        - id: fromNginx_route
+        - id: product_Nginx_route
           uri: lb://shoppingmall-product
           predicates:
-            - Host=192.168.56.10
+            - Host=shoppingmall.com
+
+        - id: search_Nginx_route
+          uri: lb://shoppingmall-search
+          predicates:
+            - Host=search.shoppingmall.com

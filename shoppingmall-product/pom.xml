@@ -53,7 +53,7 @@
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
-        <!-- 前段页面修改，不重启项目，但是要重新编译 -->
+        <!-- 前端页面修改，不重启项目，但是要重新编译 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>

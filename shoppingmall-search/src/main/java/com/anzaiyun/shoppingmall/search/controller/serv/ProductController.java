@@ -1,4 +1,4 @@
-package com.anzaiyun.shoppingmall.search.controller;
+package com.anzaiyun.shoppingmall.search.controller.serv;
 
 import com.anzaiyun.common.to.es.SkuEsModelTo;
 import com.anzaiyun.common.utils.R;

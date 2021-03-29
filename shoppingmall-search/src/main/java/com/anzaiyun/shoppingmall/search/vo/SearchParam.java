@@ -48,11 +48,14 @@ public class SearchParam {
 
     /**
      * 按照属性进行筛选
+     * attr检索条件拼装格式如下
+     * attr=1_5寸:8寸
+     * attr=attrId_属性值1:属性值2:属性值3:……
      */
     private List<String> attrs;
 
     /**
      * 页码
      */
-    private Long pageNum;
+    private Long pageNum=1L;
 }

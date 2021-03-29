@@ -11,7 +11,7 @@ public class SkuEsModelTo {
     private Long skuId;
     private Long spuId;
     private String skuTitle;
-    private BigDecimal skyPrice;
+    private BigDecimal skuPrice;
     private String skuImg;
     private Long saleCount;
     private Boolean hasStock;

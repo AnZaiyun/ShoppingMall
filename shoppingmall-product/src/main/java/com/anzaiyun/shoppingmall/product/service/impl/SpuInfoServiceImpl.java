@@ -262,7 +262,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         List<SkuEsModelTo> skuEsModelToList = skuList.stream().map(sku -> {
             SkuEsModelTo skuEsModel = new SkuEsModelTo();
             BeanUtils.copyProperties(sku,skuEsModel);
-            skuEsModel.setSkyPrice(sku.getPrice());
+            skuEsModel.setSkuPrice(sku.getPrice());
             skuEsModel.setSkuImg(sku.getSkuDefaultImg());
 
             //设置库存信息

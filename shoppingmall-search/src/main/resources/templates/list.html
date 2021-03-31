@@ -2005,8 +2005,9 @@
     }
 
     $(".page_a").click(function () {
-        var pn = $(this).getAttribute("pn")
-        var href = location.href + "";
+        console.log("1231231231");
+        const pn = $(this).attr("pn");
+        const href = location.href;
         if (href.indexOf("pageNum") > -1){
             location.href = replaceParamVal(href,"pageNum",pn);
         }else {
@@ -2018,15 +2019,15 @@
             location.href = location.href +"pageNum=" + pn;
         }
 
-
-
         return false;
     });
 
     function replaceParamVal(url,paramName,replaceValue) {
         var oUrl = url.toString();
         var re = eval('/('+paramName+'=)([^&]*)/gi');
-        var nUrl = oUrl.replace(re,paramName+'='+replaceValue)
+        var nUrl = oUrl.replace(re,paramName+'='+replaceValue);
+
+        return nUrl;
     }
 </script>
 </body>

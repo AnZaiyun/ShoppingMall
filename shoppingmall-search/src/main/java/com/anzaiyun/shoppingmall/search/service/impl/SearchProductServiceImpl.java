@@ -6,7 +6,6 @@ import com.anzaiyun.shoppingmall.search.constant.ProductConstant;
 import com.anzaiyun.shoppingmall.search.service.SearchProductService;
 import com.anzaiyun.shoppingmall.search.vo.SearchParam;
 import com.anzaiyun.shoppingmall.search.vo.SearchResult;
-import org.apache.lucene.search.TotalHits;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
@@ -14,7 +13,6 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
-import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.MultiBucketsAggregation;
 import org.elasticsearch.search.aggregations.bucket.nested.NestedAggregationBuilder;
@@ -244,6 +242,13 @@ public class SearchProductServiceImpl implements SearchProductService {
         searchResult.setPageNum(searchParam.getPageNum());
         long totalPage = totalCount % ProductConstant.PRODUCT_PAGESIZE == 0 ? totalCount / ProductConstant.PRODUCT_PAGESIZE : (totalCount / ProductConstant.PRODUCT_PAGESIZE + 1);
         searchResult.setTotalPages(totalPage);
+        List<Long> pageList = new ArrayList<>();
+        for (long i = 1; i <= totalPage; i++) {
+            pageList.add(i);
+        }
+        if (pageList!=null && pageList.size()>0){
+            searchResult.setPageNavs(pageList);
+        }
 
         return searchResult;
     }

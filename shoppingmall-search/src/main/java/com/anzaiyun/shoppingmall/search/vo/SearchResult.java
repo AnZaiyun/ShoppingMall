@@ -25,6 +25,7 @@ public class SearchResult {
      * 总页码
      */
     private Long totalPages;
+    private List<Long> pageNavs;
 
     /**
      * 所有涉及到的品牌

@@ -1,5 +1,6 @@
 package com.anzaiyun.shoppingmall.product.service;
 
+import com.anzaiyun.shoppingmall.product.vo.ItemPage.SkuItemVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.anzaiyun.common.utils.PageUtils;
 import com.anzaiyun.shoppingmall.product.entity.SkuInfoEntity;
@@ -21,5 +22,7 @@ public interface SkuInfoService extends IService<SkuInfoEntity> {
     PageUtils queryPageByCondition(Map<String, Object> params);
 
     List<SkuInfoEntity> getSkuInfoBySpuId(Long spuId);
+
+    SkuItemVo getSkuItem(Long skuId);
 }
 

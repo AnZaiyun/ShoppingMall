@@ -1,6 +1,14 @@
 package com.anzaiyun.shoppingmall.product.service.impl;
 
+import com.anzaiyun.shoppingmall.product.entity.SkuImagesEntity;
+import com.anzaiyun.shoppingmall.product.entity.SpuInfoDescEntity;
+import com.anzaiyun.shoppingmall.product.service.AttrGroupService;
+import com.anzaiyun.shoppingmall.product.service.SkuImagesService;
+import com.anzaiyun.shoppingmall.product.service.SpuInfoDescService;
+import com.anzaiyun.shoppingmall.product.vo.ItemPage.SkuItemVo;
+import com.anzaiyun.shoppingmall.product.vo.ItemPage.SpuAttrGroupVo;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +26,15 @@ import com.anzaiyun.shoppingmall.product.service.SkuInfoService;
 
 @Service("skuInfoService")
 public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> implements SkuInfoService {
+
+    @Autowired
+    SkuImagesService skuImagesService;
+
+    @Autowired
+    SpuInfoDescService spuInfoDescService;
+
+    @Autowired
+    AttrGroupService attrGroupService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -73,6 +90,32 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
 
         List<SkuInfoEntity> skuInfoEntityList = this.list(new QueryWrapper<SkuInfoEntity>().eq("spu_id",spuId));
         return skuInfoEntityList;
+    }
+
+    @Override
+    public SkuItemVo getSkuItem(Long skuId) {
+        SkuItemVo skuItemVo = new SkuItemVo();
+        //查询基本信息
+        SkuInfoEntity skuInfo = getById(skuId);
+        skuItemVo.setSkuInfo(skuInfo);
+
+        //sku图片信息
+        List<SkuImagesEntity> skuImages = skuImagesService.getIamgeBySkuId(skuId);
+        skuItemVo.setSkuImages(skuImages);
+
+        //spu销售属性组合
+
+        //spu的介绍
+        Long spuId = skuInfo.getSpuId();
+        SpuInfoDescEntity spuInfo = spuInfoDescService.getById(spuId);
+        skuItemVo.setSpuDesc(spuInfo);
+
+        //spu的规格参数信息
+        List<SpuAttrGroupVo> spuAttrGroup = attrGroupService.getAttrGroupWithAttrsBySpuId(spuId);
+        //以上的方法比较复杂，需要查询两遍sql，其实也可以使用mybatis的结果集封装功能，自动将数据转为想要的groupvo格式
+        List<SpuAttrGroupVo> spuAttrGroup2 = attrGroupService.getAttrGroupWithAttrsBySpuIdSimple(spuId);
+        return skuItemVo;
+
     }
 
 }

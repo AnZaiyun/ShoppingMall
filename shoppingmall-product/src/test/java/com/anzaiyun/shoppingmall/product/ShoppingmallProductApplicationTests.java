@@ -5,7 +5,10 @@ package com.anzaiyun.shoppingmall.product;
 //import com.aliyun.oss.OSSClientBuilder;
 import com.anzaiyun.shoppingmall.product.config.ProductRedissonConfig;
 import com.anzaiyun.shoppingmall.product.entity.BrandEntity;
+import com.anzaiyun.shoppingmall.product.service.AttrGroupService;
 import com.anzaiyun.shoppingmall.product.service.BrandService;
+import com.anzaiyun.shoppingmall.product.vo.ItemPage.SkuItemVo;
+import com.anzaiyun.shoppingmall.product.vo.ItemPage.SpuAttrGroupVo;
 import org.junit.jupiter.api.Test;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +16,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.List;
 import java.util.UUID;
 
 @SpringBootTest
@@ -30,6 +32,9 @@ class ShoppingmallProductApplicationTests {
 
     @Autowired
     ProductRedissonConfig productRedissonConfig;
+
+    @Autowired
+    AttrGroupService attrGroupService;
 
 //    @Autowired
 //    OSSClient ossClient;
@@ -75,5 +80,17 @@ class ShoppingmallProductApplicationTests {
     void testRedisson() throws IOException {
         RedissonClient redisson = productRedissonConfig.redisson();
         System.out.println(redisson);
+    }
+
+    @Test
+    void testGroupWithAttrsSimple(){
+        List<SpuAttrGroupVo> spuAttrGroupVo = attrGroupService.getAttrGroupWithAttrsBySpuIdSimple(9L);
+        System.out.println(spuAttrGroupVo);
+    }
+
+    @Test
+    void testGroupWithAttrs(){
+        List<SpuAttrGroupVo> spuAttrGroupVo = attrGroupService.getAttrGroupWithAttrsBySpuId(9L);
+        System.out.println(spuAttrGroupVo);
     }
 }

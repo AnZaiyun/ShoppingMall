@@ -11,5 +11,15 @@
         <result property="attrSort" column="attr_sort"/>
     </resultMap>
 
+    <select id="getDetailAttrByGroupId"
+            resultType="com.anzaiyun.shoppingmall.product.vo.ItemPage.SpuBaseAttrVo">
+        select distinct a.attr_id,a.attr_name,a.attr_value
+        from pms_product_attr_value a,
+             pms_attr_attrgroup_relation b
+        where a.attr_id = b.attr_id and
+              a.spu_id = #{spuId}   and
+              b.attr_group_id = #{attrGroupId}
+    </select>
+
 
 </mapper>

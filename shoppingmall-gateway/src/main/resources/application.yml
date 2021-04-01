@@ -64,7 +64,7 @@ spring:
         - id: product_Nginx_route
           uri: lb://shoppingmall-product
           predicates:
-            - Host=shoppingmall.com
+            - Host=shoppingmall.com,item.shoppingmall.com
 
         - id: search_Nginx_route
           uri: lb://shoppingmall-search

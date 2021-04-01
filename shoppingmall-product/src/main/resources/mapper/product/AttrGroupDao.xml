@@ -13,5 +13,38 @@
         <result property="catelogId" column="catelog_id"/>
     </resultMap>
 
+    <!--自定义返回的结果数据类型-->
+    <resultMap id="spuGroupWithAttrs" type="com.anzaiyun.shoppingmall.product.vo.ItemPage.SpuAttrGroupVo">
+        <result property="groupId" column="groupId"></result>
+        <result property="groupName" column="groupName"></result>
+        <collection property="attrs" ofType="com.anzaiyun.shoppingmall.product.vo.ItemPage.SpuBaseAttrVo">
+            <result column="attrId" property="attrId" ></result>
+            <result property="attrName" column="attrName"></result>
+            <result property="attrValue" column="attrValue"></result>
+        </collection>
+    </resultMap>
+
+    <select id="getAttrGroupBySpuId" resultType="com.anzaiyun.shoppingmall.product.entity.AttrGroupEntity">
+        select distinct c.*
+        from pms_product_attr_value a,
+             pms_attr_attrgroup_relation b,
+             pms_attr_group c
+        where a.attr_id = b.attr_id and
+              b.attr_group_id = c.attr_group_id and
+              a.spu_id = #{spuId}
+    </select>
+
+    <select id="getAttrGroupWithAttrsBySpuId"
+            resultMap="spuGroupWithAttrs">
+        select c.attr_group_id groupId, c.attr_group_name groupName,
+               a.attr_id attrId, a.attr_name attrName, a.attr_value attrValue
+        from pms_product_attr_value a,
+             pms_attr_attrgroup_relation b,
+             pms_attr_group c
+        where a.attr_id = b.attr_id and
+              b.attr_group_id = c.attr_group_id and
+              a.spu_id = #{spuId}
+    </select>
+
 
 </mapper>

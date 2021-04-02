@@ -12,6 +12,15 @@
         <result property="attrValue" column="attr_value"/>
         <result property="attrSort" column="attr_sort"/>
     </resultMap>
+    <select id="getSKuSaleAttrBySpuId"
+            resultType="com.anzaiyun.shoppingmall.product.vo.ItemPage.SkuSaleAttrVo">
+        select sale.attr_id, sale.attr_name,
+               GROUP_CONCAT(distinct sale.attr_value) attr_value
+        from pms_sku_info info
+        left join pms_sku_sale_attr_value sale on sale.sku_id = info.sku_id
+        where info.spu_id = #{spuId};
+        group by sale.attr_id, sale.attr_name
+    </select>
 
 
 </mapper>

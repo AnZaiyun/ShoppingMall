@@ -2,10 +2,9 @@ package com.anzaiyun.shoppingmall.product.service.impl;
 
 import com.anzaiyun.shoppingmall.product.entity.SkuImagesEntity;
 import com.anzaiyun.shoppingmall.product.entity.SpuInfoDescEntity;
-import com.anzaiyun.shoppingmall.product.service.AttrGroupService;
-import com.anzaiyun.shoppingmall.product.service.SkuImagesService;
-import com.anzaiyun.shoppingmall.product.service.SpuInfoDescService;
+import com.anzaiyun.shoppingmall.product.service.*;
 import com.anzaiyun.shoppingmall.product.vo.ItemPage.SkuItemVo;
+import com.anzaiyun.shoppingmall.product.vo.ItemPage.SkuSaleAttrVo;
 import com.anzaiyun.shoppingmall.product.vo.ItemPage.SpuAttrGroupVo;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,6 @@ import com.anzaiyun.common.utils.Query;
 
 import com.anzaiyun.shoppingmall.product.dao.SkuInfoDao;
 import com.anzaiyun.shoppingmall.product.entity.SkuInfoEntity;
-import com.anzaiyun.shoppingmall.product.service.SkuInfoService;
 
 
 @Service("skuInfoService")
@@ -35,6 +33,9 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
 
     @Autowired
     AttrGroupService attrGroupService;
+
+    @Autowired
+    SkuSaleAttrValueService skuSaleAttrValueService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -103,12 +104,13 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
         List<SkuImagesEntity> skuImages = skuImagesService.getIamgeBySkuId(skuId);
         skuItemVo.setSkuImages(skuImages);
 
-        //spu销售属性组合
-
         //spu的介绍
         Long spuId = skuInfo.getSpuId();
         SpuInfoDescEntity spuInfo = spuInfoDescService.getById(spuId);
         skuItemVo.setSpuDesc(spuInfo);
+
+        //spu销售属性组合
+        List<SkuSaleAttrVo> skuSaleAttrVos = skuSaleAttrValueService.getSKuSaleAttrBySpuId(spuId);
 
         //spu的规格参数信息
         List<SpuAttrGroupVo> spuAttrGroup = attrGroupService.getAttrGroupWithAttrsBySpuId(spuId);

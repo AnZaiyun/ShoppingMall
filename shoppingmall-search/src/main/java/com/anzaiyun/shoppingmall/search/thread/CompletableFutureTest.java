@@ -24,7 +24,7 @@ public class CompletableFutureTest {
      * 线程数量大于等于 maximumPoolSize，且 workQueue 已满，则使用拒绝策略处理新任务
      */
     public static ExecutorService executorService =
-            new ThreadPoolExecutor(10,
+            new ThreadPoolExecutor(2,
                     20,
                     300,
                     TimeUnit.SECONDS,
@@ -172,6 +172,7 @@ public class CompletableFutureTest {
             System.out.println("线程allFuture02");
             return "线程allFuture02";
         },executorService);
+
 
         CompletableFuture<String> allFuture03 = CompletableFuture.supplyAsync(() -> {
             System.out.println("线程allFuture03");

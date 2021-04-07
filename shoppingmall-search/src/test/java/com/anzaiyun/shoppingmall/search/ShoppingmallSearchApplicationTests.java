@@ -174,5 +174,18 @@ class ShoppingmallSearchApplicationTests {
         private Integer age;
     }
 
+    @Test
+    public void testFor(){
+
+        int i=1;
+        int j=0;
+
+        if (i==1 && (j=i)==2){
+            System.out.println(123);
+        }
+
+        System.out.println(j);
+    }
+
 
 }

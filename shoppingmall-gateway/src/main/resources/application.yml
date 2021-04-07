@@ -70,3 +70,8 @@ spring:
           uri: lb://shoppingmall-search
           predicates:
             - Host=search.shoppingmall.com
+
+        - id: auth_server_Nginx_route
+          uri: lb://shoppingmall-auth-server
+          predicates:
+            - Host=auth.shoppingmall.com

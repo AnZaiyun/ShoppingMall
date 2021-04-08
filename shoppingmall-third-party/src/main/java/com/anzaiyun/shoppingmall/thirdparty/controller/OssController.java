@@ -1,4 +1,4 @@
-package com.anzaiyun.shoppingmall.thirdparty;
+package com.anzaiyun.shoppingmall.thirdparty.controller;
 
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;

@@ -14,6 +14,9 @@ spring:
       secret-key: tDNe03mZBo8GjIA4ZDSHiGFoHntsay
       oss:
         endpoint: oss-cn-beijing.aliyuncs.com
+      sms:
+        host: "https://gyytz.market.alicloudapi.com"
+        path: "/sms/smsSend"
 
 management:
   endpoints:

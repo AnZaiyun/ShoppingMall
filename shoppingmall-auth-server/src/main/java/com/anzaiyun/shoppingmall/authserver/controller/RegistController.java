@@ -1,7 +1,9 @@
 package com.anzaiyun.shoppingmall.authserver.controller;
 
 import com.anzaiyun.common.utils.R;
+import com.anzaiyun.shoppingmall.authserver.fegin.MemberFeginService;
 import com.anzaiyun.shoppingmall.authserver.fegin.SmsFeginService;
+import com.anzaiyun.shoppingmall.authserver.service.RegistService;
 import com.anzaiyun.shoppingmall.authserver.vo.UserRegistVo;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -30,7 +34,13 @@ public class RegistController {
     SmsFeginService smsFeginService;
 
     @Autowired
+    RegistService registService;
+
+    @Autowired
     StringRedisTemplate redisTemplate;
+
+    @Autowired
+    MemberFeginService memberFeginService;
 
     @GetMapping("/regist.html")
     public String regist(){
@@ -39,21 +49,38 @@ public class RegistController {
 
     /**
      * 注册页提交信息，进行注册
+     * Model 结果重定向时，model里的数据会被删除，不会携带
+     * RedirectAttributes利用的session原理，在分布式项目下会存在问题
+     * @param userRegist
+     * @param result
+     * @param model
+     * @param attributes
      * @return
      */
     @PostMapping("/regist")
-    public String registSubmit(@Validated UserRegistVo userRegist, BindingResult result, Model model){
-        if (result.hasErrors()){
+    public String registSubmit(@Validated UserRegistVo userRegist, BindingResult result, Model model,
+                               RedirectAttributes attributes){
 
+        if (result.hasErrors()){
             Map<String, String> errors = result.getFieldErrors().stream().collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
 
             model.addAttribute("errors",errors);
+            attributes.addFlashAttribute("errors",errors);
             //如果存在校验出错，转发到注册页
-            return "forward:/regist";
+//            return "regist.html";
+            return "redirect:http://auth.shoppingmall.com/regist.html";
         }
 
         //真正注册，调用远程服务进行注册
+        // 校验验证码
+        Map<String, String> errors = registService.checkCode(userRegist);
+        if(errors.size()>0){
+            attributes.addFlashAttribute("errors",errors);
+            return "redirect:http://auth.shoppingmall.com/regist.html";
+        }
 
+        //调用远程服务
+        memberFeginService.regist(userRegist);
 
         return "redirect:/login.html";
     }

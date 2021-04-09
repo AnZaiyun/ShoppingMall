@@ -3,8 +3,8 @@ package com.anzaiyun.shoppingmall.member.controller;
 import java.util.Arrays;
 import java.util.Map;
 
-//import org.apache.shiro.authz.annotation.RequiresPermissions;
 import com.anzaiyun.shoppingmall.member.feign.coupon.CouponFeignService;
+import com.anzaiyun.shoppingmall.member.vo.UserRegistVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -86,6 +86,15 @@ public class MemberController {
     //@RequiresPermissions("member:member:delete")
     public R delete(@RequestBody Long[] ids){
 		memberService.removeByIds(Arrays.asList(ids));
+
+        return R.ok();
+    }
+
+
+
+    @RequestMapping("/regist")
+    public R regist(@RequestBody UserRegistVo userRegistVo){
+        memberService.regist(userRegistVo);
 
         return R.ok();
     }

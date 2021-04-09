@@ -12,6 +12,7 @@ public class WebControllerConfig implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
+        //路径映射默认是get方法
         registry.addViewController("/denglu").setViewName("login");
     }
 }

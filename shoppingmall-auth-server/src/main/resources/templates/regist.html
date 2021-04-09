@@ -5967,7 +5967,8 @@ Cookie</span>是由网页服务器存放在您的访问设备上的文本文件�
             <label class="username_label">用 户 名
                 <input name="uName" maxlength="20" type="text" placeholder="您的用户名和登录名" >
             </label>
-            <div class="tips" th:text="${errors!=null?errors.uName:''}">
+            <div class="tips" style="color: red"
+				 th:text="${errors!=null?(#maps.containsKey(errors,'uName')?errors.uName:''):''}">
 
             </div>
         </div>
@@ -5975,7 +5976,8 @@ Cookie</span>是由网页服务器存放在您的访问设备上的文本文件�
             <label class="other_label">设 置 密 码
                 <input name="uPwd" maxlength="20" type="password" placeholder="建议至少使用两种字符组合">
             </label>
-            <div class="tips">
+            <div class="tips"  style="color: red"
+				 th:text="${errors!=null?(#maps.containsKey(errors,'uPwd')?errors.uPwd:''):''}>
 
             </div>
         </div>
@@ -5992,7 +5994,8 @@ Cookie</span>是由网页服务器存放在您的访问设备上的文本文件�
                 <span>中国 0086∨</span>
                 <input name="uPhone" id="phoneNum" class="phone" maxlength="20" type="text" placeholder="建议使用常用手机">
             </label>
-            <div class="tips">
+            <div class="tips" style="color: red"
+				 th:text="${errors!=null?(#maps.containsKey(errors,'uPhone')?errors.uPhone:''):''}>
 
             </div>
         </div>
@@ -6001,7 +6004,8 @@ Cookie</span>是由网页服务器存放在您的访问设备上的文本文件�
                 <input name="code" maxlength="20" type="text" placeholder="请输入验证码" class="caa">
             </label>
             <a id="sendCode">发送验证码</a>
-            <div class="tips">
+            <div class="tips" style="color: red"
+				 th:text="${errors!=null?(#maps.containsKey(errors,'code')?errors.code:''):''}>
 
             </div>
         </div>

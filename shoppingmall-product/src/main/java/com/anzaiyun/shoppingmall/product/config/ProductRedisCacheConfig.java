@@ -23,6 +23,7 @@ public class ProductRedisCacheConfig {
         //获取默认的CacheConfig
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig();
 
+        //配置redis value的值格式，这里设置为json格式
         config = config.serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericFastJsonRedisSerializer()));
 
         //如果实现了rediscache的配置类，RedisCacheConfiguration将不会再加载配置文件中配置信息，所以这里需要将配置文件的

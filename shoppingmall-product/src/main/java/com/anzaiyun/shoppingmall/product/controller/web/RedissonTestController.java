@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 分布式锁RedissonClient
+ */
 @Controller
 public class RedissonTestController {
 

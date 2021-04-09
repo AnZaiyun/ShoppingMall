@@ -20,7 +20,7 @@ public class MybatisConfig {
         //设置请求的页面大于最大页，是否继续请求，true转为请求首页，false继续请求，默认false
         paginationInterceptor.setOverflow(true);
         //设置单页的最大数量，默认500，-1不限制
-        paginationInterceptor.setLimit(50l);
+        paginationInterceptor.setLimit(50L);
         return paginationInterceptor;
     }
 }

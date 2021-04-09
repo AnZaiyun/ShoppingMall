@@ -38,7 +38,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
     @Override
     public void regist(UserRegistVo userRegistVo) {
         MemberEntity member = new MemberEntity();
-        member.setNickname(userRegistVo.getUName());
+        member.setUsername(userRegistVo.getUName());
         member.setPassword(userRegistVo.getUPwd());
         member.setMobile(userRegistVo.getUPhone());
 

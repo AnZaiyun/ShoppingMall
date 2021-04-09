@@ -71,15 +71,14 @@ public class RegistController {
             return "redirect:http://auth.shoppingmall.com/regist.html";
         }
 
-        //真正注册，调用远程服务进行注册
-        // 校验验证码
-        Map<String, String> errors = registService.checkCode(userRegist);
+        // 校验用户名，验证码等信息
+        Map<String, String> errors = registService.checkUserRegist(userRegist);
         if(errors.size()>0){
             attributes.addFlashAttribute("errors",errors);
             return "redirect:http://auth.shoppingmall.com/regist.html";
         }
 
-        //调用远程服务
+        //调用远程服务注册
         memberFeginService.regist(userRegist);
 
         return "redirect:/login.html";

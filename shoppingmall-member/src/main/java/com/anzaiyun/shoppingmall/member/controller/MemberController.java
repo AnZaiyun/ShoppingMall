@@ -1,10 +1,13 @@
 package com.anzaiyun.shoppingmall.member.controller;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.anzaiyun.shoppingmall.member.feign.coupon.CouponFeignService;
+import com.anzaiyun.shoppingmall.member.vo.UserLoginVo;
 import com.anzaiyun.shoppingmall.member.vo.UserRegistVo;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -97,6 +100,47 @@ public class MemberController {
         memberService.regist(userRegistVo);
 
         return R.ok();
+    }
+
+    /**
+     * 注册前校验
+     * @param userRegistVo
+     * @return
+     */
+    @RequestMapping("/beforeRegist")
+    public Map<String,String> beforeRegist(@RequestBody UserRegistVo userRegistVo){
+        Map<String,String> errors = new HashMap<>();
+        MemberEntity memberEntity = memberService.getOne(new QueryWrapper<MemberEntity>().eq("username", userRegistVo.getUName()).or().
+                eq("mobile", userRegistVo.getUPhone()));
+
+        if (memberEntity!=null){
+            if (memberEntity.getUsername().equals(userRegistVo.getUName())){
+                errors.put("uName","当前用户名已存在请重新填写");
+            }
+
+            if (memberEntity.getMobile().equals(userRegistVo.getUPhone())){
+                errors.put("uPhone","当前手机号码已注册，请直接登录");
+            }
+        }
+        return errors;
+    }
+
+    /**
+     * 登录前校验
+     * @param userLoginVo
+     * @return
+     */
+    @RequestMapping("/beforeLogin")
+    public Map<String,String> beforeLogin(@RequestBody UserLoginVo userLoginVo){
+        Map<String,String> errors = new HashMap<>();
+        MemberEntity memberEntity = memberService.getOne(new QueryWrapper<MemberEntity>().eq("username", userLoginVo.getUName()).
+                eq("password", userLoginVo.getUPwd()));
+
+        if(memberEntity == null){
+            errors.put("uPwd","用户名或密码不正确");
+        }
+
+        return errors;
     }
 
     @RequestMapping("/membercouponslist")

@@ -5,5 +5,5 @@ import com.anzaiyun.shoppingmall.authserver.vo.UserRegistVo;
 import java.util.Map;
 
 public interface RegistService {
-    Map<String, String> checkCode(UserRegistVo userRegist);
+    Map<String, String> checkUserRegist(UserRegistVo userRegist);
 }

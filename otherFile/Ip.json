@@ -1,0 +1,13 @@
+{
+  "port": {
+    "gateway": 88,
+    "search": 8088,
+    "coupon":11000,
+    "member": 12000,
+    "order": 13000,
+    "product": 14000,
+    "ware": 15000,
+    "auth-serve": 16000,
+    "third-part": 30000
+  }
+}

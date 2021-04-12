@@ -81,7 +81,7 @@ public class RegistController {
         //调用远程服务注册
         memberFeginService.regist(userRegist);
 
-        return "redirect:/login.html";
+        return "redirect:http://auth.shoppingmall.com/login.html";
     }
 
     /**

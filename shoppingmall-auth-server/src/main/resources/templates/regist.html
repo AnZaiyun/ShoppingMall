@@ -5977,7 +5977,7 @@ Cookie</span>是由网页服务器存放在您的访问设备上的文本文件�
                 <input name="uPwd" maxlength="20" type="password" placeholder="建议至少使用两种字符组合">
             </label>
             <div class="tips"  style="color: red"
-				 th:text="${errors!=null?(#maps.containsKey(errors,'uPwd')?errors.uPwd:''):''}>
+				 th:text="${errors!=null?(#maps.containsKey(errors,'uPwd')?errors.uPwd:''):''}" >
 
             </div>
         </div>
@@ -5995,7 +5995,7 @@ Cookie</span>是由网页服务器存放在您的访问设备上的文本文件�
                 <input name="uPhone" id="phoneNum" class="phone" maxlength="20" type="text" placeholder="建议使用常用手机">
             </label>
             <div class="tips" style="color: red"
-				 th:text="${errors!=null?(#maps.containsKey(errors,'uPhone')?errors.uPhone:''):''}>
+				 th:text="${errors!=null?(#maps.containsKey(errors,'uPhone')?errors.uPhone:''):''}" >
 
             </div>
         </div>
@@ -6005,7 +6005,7 @@ Cookie</span>是由网页服务器存放在您的访问设备上的文本文件�
             </label>
             <a id="sendCode">发送验证码</a>
             <div class="tips" style="color: red"
-				 th:text="${errors!=null?(#maps.containsKey(errors,'code')?errors.code:''):''}>
+				 th:text="${errors!=null?(#maps.containsKey(errors,'code')?errors.code:''):''}" >
 
             </div>
         </div>

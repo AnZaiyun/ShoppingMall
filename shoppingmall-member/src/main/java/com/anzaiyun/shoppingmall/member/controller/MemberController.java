@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.anzaiyun.shoppingmall.member.exception.PhoneExsitException;
+import com.anzaiyun.shoppingmall.member.exception.UserNameExsitException;
 import com.anzaiyun.shoppingmall.member.feign.coupon.CouponFeignService;
 import com.anzaiyun.shoppingmall.member.vo.UserLoginVo;
 import com.anzaiyun.shoppingmall.member.vo.UserRegistVo;
@@ -110,6 +112,8 @@ public class MemberController {
     @RequestMapping("/beforeRegist")
     public Map<String,String> beforeRegist(@RequestBody UserRegistVo userRegistVo){
         Map<String,String> errors = new HashMap<>();
+
+        //这里是查询出结果后对结果数据进行判断，其实也可以直接采用异常的方式将异常抛出
         MemberEntity memberEntity = memberService.getOne(new QueryWrapper<MemberEntity>().eq("username", userRegistVo.getUName()).or().
                 eq("mobile", userRegistVo.getUPhone()));
 
@@ -122,6 +126,22 @@ public class MemberController {
                 errors.put("uPhone","当前手机号码已注册，请直接登录");
             }
         }
+
+        //使用捕获异常的方式来校验信息，感觉这种方式好像也没有多实用。。。
+//        try{
+//            memberService.checkPhoneUnique(userRegistVo.getUPhone());
+//        }catch (PhoneExsitException e){
+//            errors.put("uPhone","当前手机号码已注册，请直接登录");
+//        }
+//
+//        try {
+//            memberService.checkUserNameUnique(userRegistVo.getUName());
+//        }catch (UserNameExsitException e){
+//            errors.put("uName","当前用户名已存在请重新填写");
+//        }
+
+
+
         return errors;
     }
 

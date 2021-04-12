@@ -2,6 +2,7 @@ package com.anzaiyun.shoppingmall.member.service;
 
 import com.anzaiyun.shoppingmall.member.exception.PhoneExsitException;
 import com.anzaiyun.shoppingmall.member.exception.UserNameExsitException;
+import com.anzaiyun.shoppingmall.member.vo.UserLoginVo;
 import com.anzaiyun.shoppingmall.member.vo.UserRegistVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.anzaiyun.common.utils.PageUtils;
@@ -33,5 +34,7 @@ public interface MemberService extends IService<MemberEntity> {
      * @param uName
      */
     void checkUserNameUnique(String uName) throws UserNameExsitException;
+
+    Map<String, String> checkLoginUser(UserLoginVo userLoginVo);
 }
 

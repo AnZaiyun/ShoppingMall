@@ -152,13 +152,8 @@ public class MemberController {
      */
     @RequestMapping("/beforeLogin")
     public Map<String,String> beforeLogin(@RequestBody UserLoginVo userLoginVo){
-        Map<String,String> errors = new HashMap<>();
-        MemberEntity memberEntity = memberService.getOne(new QueryWrapper<MemberEntity>().eq("username", userLoginVo.getUName()).
-                eq("password", userLoginVo.getUPwd()));
 
-        if(memberEntity == null){
-            errors.put("uPwd","用户名或密码不正确");
-        }
+        Map<String,String> errors = memberService.checkLoginUser(userLoginVo);
 
         return errors;
     }

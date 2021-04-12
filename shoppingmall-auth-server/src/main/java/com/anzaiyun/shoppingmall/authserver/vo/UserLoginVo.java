@@ -7,8 +7,7 @@ import javax.validation.constraints.NotEmpty;
 
 @Data
 public class UserLoginVo {
-    @NotEmpty(message = "用户名必须填写")
-    @Length(min = 4,max = 8,message = "用户名长度最小4位，最长8位")
+    @NotEmpty(message = "邮箱/用户名/手机号必须填写")
     private String uName;
 
     @NotEmpty(message = "用户密码必须填写")

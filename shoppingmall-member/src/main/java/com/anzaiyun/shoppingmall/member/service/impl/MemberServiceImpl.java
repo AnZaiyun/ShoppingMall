@@ -4,12 +4,14 @@ import com.anzaiyun.shoppingmall.member.entity.MemberLevelEntity;
 import com.anzaiyun.shoppingmall.member.exception.PhoneExsitException;
 import com.anzaiyun.shoppingmall.member.exception.UserNameExsitException;
 import com.anzaiyun.shoppingmall.member.service.MemberLevelService;
+import com.anzaiyun.shoppingmall.member.vo.UserLoginVo;
 import com.anzaiyun.shoppingmall.member.vo.UserRegistVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -88,6 +90,27 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
         if (count>0){
             throw new UserNameExsitException();
         }
+    }
+
+    @Override
+    public Map<String, String> checkLoginUser(UserLoginVo userLoginVo) {
+
+        Map<String,String> errors = new HashMap<>();
+
+        MemberEntity memberEntity = this.getOne(new QueryWrapper<MemberEntity>().eq("username", userLoginVo.getUName()).or()
+                                                                                .eq("mobile",userLoginVo.getUName()).or()
+                                                                                .eq("email",userLoginVo.getUName()));
+        if (memberEntity == null){
+            errors.put("uName","邮箱/用户名/手机号不存在");
+        }else {
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            boolean matches = passwordEncoder.matches(userLoginVo.getUPwd(), memberEntity.getPassword());
+            if (!matches){
+                errors.put("uName","用户名或密码不正确");
+            }
+        }
+
+        return errors;
     }
 
 }

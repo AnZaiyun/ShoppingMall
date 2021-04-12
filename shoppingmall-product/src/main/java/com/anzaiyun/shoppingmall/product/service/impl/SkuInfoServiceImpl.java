@@ -100,6 +100,13 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
         return skuInfoEntityList;
     }
 
+    /**
+     * 获取商品详情信息
+     * @param skuId
+     * @return
+     * @throws ExecutionException
+     * @throws InterruptedException
+     */
     @Override
     public SkuItemVo getSkuItem(Long skuId) throws ExecutionException, InterruptedException {
         SkuItemVo skuItemVo = new SkuItemVo();

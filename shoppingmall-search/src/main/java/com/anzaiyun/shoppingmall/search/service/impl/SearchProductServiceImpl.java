@@ -34,12 +34,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @Author AnZaiYun
+ */
 @Service("searchProduct")
 public class SearchProductServiceImpl implements SearchProductService {
 
     @Autowired
     private RestHighLevelClient client;
 
+    /**
+     * java中构建出dsl语句的关键就是要先在elasticsearch中把查询逻辑构建出，然后按照逻辑嵌套即可
+     * dsl语句查询，/resources/sql/elasticsearch
+     * @param searchParam
+     * @return
+     */
     public SearchSourceBuilder makerDslStatement(SearchParam searchParam){
         //配置dsl
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();

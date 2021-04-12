@@ -10,6 +10,8 @@ import com.anzaiyun.shoppingmall.product.service.BrandService;
 import com.anzaiyun.shoppingmall.product.vo.ItemPage.SkuItemVo;
 import com.anzaiyun.shoppingmall.product.vo.ItemPage.SpuAttrGroupVo;
 import org.junit.jupiter.api.Test;
+import org.redisson.api.RLock;
+import org.redisson.api.RReadWriteLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -67,6 +69,9 @@ class ShoppingmallProductApplicationTests {
         System.out.println("保存成功。。。");
     }
 
+    /**
+     * stringRedisTemplate用于操控redis
+     */
     @Test
     void testStringRedisTemplate(){
         ValueOperations<String, String> ops = stringRedisTemplate.opsForValue();
@@ -76,10 +81,18 @@ class ShoppingmallProductApplicationTests {
         System.out.println(hello);
     }
 
+    /**
+     * redisson用于获取分布式锁
+     * @throws IOException
+     */
     @Test
     void testRedisson() throws IOException {
         RedissonClient redisson = productRedissonConfig.redisson();
         System.out.println(redisson);
+
+        RReadWriteLock readWriteLock = redisson.getReadWriteLock("ReadWriteLockTest");
+        RLock rLock = readWriteLock.readLock();
+        RLock wLock = readWriteLock.writeLock();
     }
 
     @Test

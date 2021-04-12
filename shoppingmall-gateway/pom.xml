@@ -26,6 +26,7 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
+        <!-- 引入网关依赖，然后在配置文件中配置路由规则即可开启网关功能 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>

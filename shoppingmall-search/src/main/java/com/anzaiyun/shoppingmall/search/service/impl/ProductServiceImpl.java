@@ -22,6 +22,11 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private RestHighLevelClient client;
 
+    /**
+     * 上架商品
+     * @param skuEsModelList
+     * @throws IOException
+     */
     @Override
     public void productUp(List<SkuEsModelTo> skuEsModelList) throws IOException {
 

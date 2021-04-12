@@ -53,6 +53,47 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * @ControllerAdvice
  *  1）、编写异常处理类，使用@ControllerAdvice。
  *  2）、使用@ExceptionHandler标注方法可以处理的异常。
+ *
+ * 5、远程调用服务，fegin
+ * 1）引入依赖
+ * <dependency>
+ *   <groupId>org.springframework.cloud</groupId>
+ *   <artifactId>spring-cloud-starter-openfeign</artifactId>
+ * </dependency>
+ * 2）主启动类添加注解
+ * @EnableFeignClients(basePackages = "com.anzaiyun.shoppingmall.product.fegin")
+ * 其中basePackages为fegin接口的相对路径
+ * 3）编写fegin接口
+ * @FeignClient("shoppingmall-search")
+ * public interface SearchFeginService {
+ *
+ *     @PostMapping("/search/product/upproduct")
+ *     public R upProduct(@RequestBody List<SkuEsModelTo> skuEsModelList);
+ *
+ * }
+ * 其中FeignClient中value为要远程调用的服务在nacos中的名字
+ * PostMapping为服务链接的完整路径，类映射路径+方法映射路径
+ * 具体的方法为远程controller的完全拷贝，两边的方法签名完全一致
+ * 其中因为网络间传递的为json字符串，所以如果需要转为实体类，需要添加@RequestBody注解
+ *
+ * 6、nginx配置
+ * 访问shoppingmall.com,nginx会拦截请求，根据路由规则，静态文件直接返回，动态数据则转发到服务端网关，网关再根据路由规则转发
+ * 到具体的服务
+ *
+ * 7、thymeleaf模板引擎
+ * 1）引入依赖
+ * <dependency>
+ *    <groupId>org.springframework.boot</groupId>
+ *    <artifactId>spring-boot-starter-thymeleaf</artifactId>
+ * </dependency>
+ *
+ * 其中为了方便开发，每次修改模板文件后不需要重启项目，可以引入devtools，这样修改文件后只需要重新编译项目即可（快捷键ctrl+F9）
+ * 需要注意的是如果修改了配置文件，则还是要重启项目
+ * <dependency>
+ *    <groupId>org.springframework.boot</groupId>
+ *    <artifactId>spring-boot-devtools</artifactId>
+ *    <optional>true</optional>
+ * </dependency>
  */
 @EnableCaching
 @MapperScan("com.anzaiyun.shoppingmall.product.dao")

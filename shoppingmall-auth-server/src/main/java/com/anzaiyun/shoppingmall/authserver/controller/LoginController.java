@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -28,7 +29,9 @@ public class LoginController {
     }
 
     @PostMapping("/loginSubmit")
-    public String loginSubmit(@Validated UserLoginVo userLoginVo, BindingResult result, Model model, RedirectAttributes attributes){
+    public String loginSubmit(@Validated UserLoginVo userLoginVo, BindingResult result,
+                              Model model, RedirectAttributes attributes,
+                              HttpSession session){
 
         /**
          * jres3.0校验
@@ -52,6 +55,7 @@ public class LoginController {
 
         //TODO 登陆成功后需要保存用户登录信息，在首页展示
         /**
+         * https://blog.csdn.net/qq_43371556/article/details/100862785
          * 分布式下web-server（tomcat）原生的session存在一下问题
          * 1、不同服务（不同域名），session不能共享
          * 解决方法：对子域名session进行升级，将session的作用域扩大到所有服务的父域名中
@@ -71,7 +75,8 @@ public class LoginController {
          * 这个方法实现需要修改原生session的get和set方法，修改量大，所以这里可以引入springsession功能，
          * springsession实现了以上逻辑
          */
-
+        //开启了springsession后，原生session的set和get实际上已被重载??
+        session.setAttribute("userInfo",userLoginVo);
         return "redirect:http://shoppingmall.com";
     }
 }

@@ -4,8 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.anzaiyun.shoppingmall.member.exception.PhoneExsitException;
-import com.anzaiyun.shoppingmall.member.exception.UserNameExsitException;
+import com.anzaiyun.common.errorenum.AuthServerExceptionInfoEnum;
 import com.anzaiyun.shoppingmall.member.feign.coupon.CouponFeignService;
 import com.anzaiyun.shoppingmall.member.vo.UserLoginVo;
 import com.anzaiyun.shoppingmall.member.vo.UserRegistVo;
@@ -123,7 +122,9 @@ public class MemberController {
             }
 
             if (memberEntity.getMobile().equals(userRegistVo.getUPhone())){
-                errors.put("uPhone","当前手机号码已注册，请直接登录");
+//                errors.put("uPhone","当前手机号码已注册，请直接登录");
+                //这里也可以通过使用枚举常量的方式获取错误信息，对于通用的错误信息，以这种方式要好一些
+                errors.put("uPhone", AuthServerExceptionInfoEnum.PHONE_EXIST_ERROR.getMsg());
             }
         }
 

@@ -108,8 +108,13 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
      */
     @Override
     public void addMenus(CategoryEntity category) {
-        //TODO 校验当前要增加的菜单是否已经存在
 
+        CategoryEntity entity = this.getOne(new QueryWrapper<CategoryEntity>().eq("name", category.getName())
+                .eq("parent_cid", category.getParentCid()));
+        if (entity!= null){
+           //同一个父类下的相同名字的菜单只能存在一个
+           return;
+        }
         baseMapper.insert(category);
 
     }
@@ -156,7 +161,6 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
         Map<String, List<Catalog2JsonVo>> catalogJsonFromDb = new HashMap<>();
         String catalogJson = stringRedisTemplate.opsForValue().get("catalogJson");
 
-        //TODO 可能会产生堆外内存溢出
         //原因：1）springboot2.0以后默认使用lettuce作为操作redis的客户端，他使用netty进行网络通信，netty在连接的过程中如果没有指定内存大小
         // 会直接使用当前程序jvm的内存大小，内存不足产生了异常导致报错
         //解决方案：1）调大内存只是延缓问题出现的时间，并没有根本解决问题，因此可以切换使用jedis

@@ -1,7 +1,7 @@
 package com.anzaiyun.shoppingmall.authserver.controller;
 
 import com.anzaiyun.shoppingmall.authserver.service.LoginService;
-import com.anzaiyun.shoppingmall.authserver.vo.UserLoginVo;
+import com.anzaiyun.common.vo.UserLoginVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -24,7 +23,14 @@ public class LoginController {
     LoginService loginService;
 
     @GetMapping({"/","/login.html"})
-    public String login(){
+    public String login(HttpSession session){
+
+        Object userInfo = session.getAttribute("userInfo");
+        //如果登陆过则直接跳转到首页
+        if (userInfo != null){
+            return "redirect:http://shoppingmall.com";
+        }
+
         return "login";
     }
 

@@ -1,7 +1,7 @@
 package com.anzaiyun.shoppingmall.authserver.fegin;
 
 import com.anzaiyun.common.utils.R;
-import com.anzaiyun.shoppingmall.authserver.vo.UserLoginVo;
+import com.anzaiyun.common.vo.UserLoginVo;
 import com.anzaiyun.shoppingmall.authserver.vo.UserRegistVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

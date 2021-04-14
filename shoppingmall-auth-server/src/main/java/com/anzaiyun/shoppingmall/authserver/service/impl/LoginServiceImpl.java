@@ -2,7 +2,7 @@ package com.anzaiyun.shoppingmall.authserver.service.impl;
 
 import com.anzaiyun.shoppingmall.authserver.fegin.MemberFeginService;
 import com.anzaiyun.shoppingmall.authserver.service.LoginService;
-import com.anzaiyun.shoppingmall.authserver.vo.UserLoginVo;
+import com.anzaiyun.common.vo.UserLoginVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

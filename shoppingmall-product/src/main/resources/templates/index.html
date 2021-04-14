@@ -95,10 +95,11 @@
   					</b>
         <ul>
           <li>
-            <a href="http://auth.shoppingmall.com">你好，请登录</a>
+            <a th:if="${session.userInfo!=null}">欢迎：[[${session.userInfo.uName}]]</a>
+            <a href="http://auth.shoppingmall.com" th:if="${session.userInfo==null}">你好，请登录：</a>
           </li>
           <li>
-            <a href="http://auth.shoppingmall.com/regist.html" class="li_2">免费注册</a>
+            <a href="http://auth.shoppingmall.com/regist.html" class="li_2" th:if="${session.userInfo==null}">免费注册</a>
           </li>
           <span>|</span>
           <li>

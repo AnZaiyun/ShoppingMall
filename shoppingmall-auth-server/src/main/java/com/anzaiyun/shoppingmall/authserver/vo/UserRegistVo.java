@@ -4,9 +4,10 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotEmpty;
+import java.io.Serializable;
 
 @Data
-public class UserRegistVo {
+public class UserRegistVo implements Serializable {
 
     @NotEmpty(message = "用户名必须填写")
     @Length(min = 4,max = 8,message = "用户名长度最小4位，最长8位")

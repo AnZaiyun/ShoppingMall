@@ -1,6 +1,6 @@
 package com.anzaiyun.shoppingmall.authserver.service;
 
-import com.anzaiyun.shoppingmall.authserver.vo.UserLoginVo;
+import com.anzaiyun.common.vo.UserLoginVo;
 
 import java.util.Map;
 

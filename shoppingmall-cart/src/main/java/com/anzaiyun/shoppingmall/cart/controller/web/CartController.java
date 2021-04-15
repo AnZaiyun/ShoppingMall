@@ -8,7 +8,9 @@ import com.anzaiyun.shoppingmall.cart.vo.UserStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
 
@@ -33,6 +35,14 @@ public class CartController {
         String sessionId = (String) model.getAttribute("sessionId");
         CartItem cartItem = new CartItem();
         cartService.addCartItem(sessionId, cartItem);
+
+        return "success";
+    }
+
+    @RequestMapping("/addToCart/{skuId}")
+    public String addToCart(@RequestParam("skuId") Long skuId,
+                            @RequestParam("num") Long num,
+                            Model model){
 
         return "success";
     }

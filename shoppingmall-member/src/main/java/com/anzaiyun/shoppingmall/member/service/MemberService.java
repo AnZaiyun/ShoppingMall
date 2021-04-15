@@ -1,5 +1,6 @@
 package com.anzaiyun.shoppingmall.member.service;
 
+import com.anzaiyun.common.vo.UserInfoVo;
 import com.anzaiyun.shoppingmall.member.exception.PhoneExsitException;
 import com.anzaiyun.shoppingmall.member.exception.UserNameExsitException;
 import com.anzaiyun.shoppingmall.member.vo.UserLoginVo;
@@ -36,5 +37,7 @@ public interface MemberService extends IService<MemberEntity> {
     void checkUserNameUnique(String uName) throws UserNameExsitException;
 
     Map<String, String> checkLoginUser(UserLoginVo userLoginVo);
+
+    UserInfoVo getMemberByName(UserLoginVo userLoginVo);
 }
 

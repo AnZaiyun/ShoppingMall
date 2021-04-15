@@ -1,11 +1,13 @@
 package com.anzaiyun.shoppingmall.member.service.impl;
 
+import com.anzaiyun.common.vo.UserInfoVo;
 import com.anzaiyun.shoppingmall.member.entity.MemberLevelEntity;
 import com.anzaiyun.shoppingmall.member.exception.PhoneExsitException;
 import com.anzaiyun.shoppingmall.member.exception.UserNameExsitException;
 import com.anzaiyun.shoppingmall.member.service.MemberLevelService;
 import com.anzaiyun.shoppingmall.member.vo.UserLoginVo;
 import com.anzaiyun.shoppingmall.member.vo.UserRegistVo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -111,6 +113,17 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
         }
 
         return errors;
+    }
+
+    @Override
+    public UserInfoVo getMemberByName(UserLoginVo userLoginVo) {
+
+        MemberEntity member = this.getOne(new QueryWrapper<MemberEntity>().eq("username", userLoginVo.getUName()));
+
+        UserInfoVo userInfoVo = new UserInfoVo();
+        BeanUtils.copyProperties(member, userInfoVo);
+
+        return userInfoVo;
     }
 
 }

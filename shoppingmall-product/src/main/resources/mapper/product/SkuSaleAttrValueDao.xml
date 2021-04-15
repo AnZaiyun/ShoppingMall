@@ -18,7 +18,7 @@
                GROUP_CONCAT(distinct sale.attr_value) attr_value
         from pms_sku_info info
         left join pms_sku_sale_attr_value sale on sale.sku_id = info.sku_id
-        where info.spu_id = #{spuId};
+        where info.spu_id = #{spuId}
         group by sale.attr_id, sale.attr_name
     </select>
 

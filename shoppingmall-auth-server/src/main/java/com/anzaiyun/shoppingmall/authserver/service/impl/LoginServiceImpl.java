@@ -1,5 +1,6 @@
 package com.anzaiyun.shoppingmall.authserver.service.impl;
 
+import com.anzaiyun.common.vo.UserInfoVo;
 import com.anzaiyun.shoppingmall.authserver.fegin.MemberFeginService;
 import com.anzaiyun.shoppingmall.authserver.service.LoginService;
 import com.anzaiyun.common.vo.UserLoginVo;
@@ -20,5 +21,13 @@ public class LoginServiceImpl implements LoginService {
         Map<String, String> errors = memberFeginService.beforeLogin(userLoginVo);
 
         return errors;
+    }
+
+    @Override
+    public UserInfoVo getUserInfo(UserLoginVo userLoginVo) {
+
+        UserInfoVo userInfoVo = memberFeginService.getMemberByName(userLoginVo);
+
+        return userInfoVo;
     }
 }

@@ -1,6 +1,7 @@
 package com.anzaiyun.shoppingmall.authserver.fegin;
 
 import com.anzaiyun.common.utils.R;
+import com.anzaiyun.common.vo.UserInfoVo;
 import com.anzaiyun.common.vo.UserLoginVo;
 import com.anzaiyun.shoppingmall.authserver.vo.UserRegistVo;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -20,4 +21,7 @@ public interface MemberFeginService {
 
     @RequestMapping("member/member/beforeLogin")
     Map<String,String> beforeLogin(@RequestBody UserLoginVo userLoginVo);
+
+    @RequestMapping("member/member/getMemberByName")
+    public UserInfoVo getMemberByName(@RequestBody UserLoginVo userLoginVo);
 }

@@ -1,5 +1,6 @@
 package com.anzaiyun.shoppingmall.authserver.controller;
 
+import com.anzaiyun.common.vo.UserInfoVo;
 import com.anzaiyun.shoppingmall.authserver.service.LoginService;
 import com.anzaiyun.common.vo.UserLoginVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +60,6 @@ public class LoginController {
             return "redirect:http://auth.shoppingmall.com";
         }
 
-        //TODO 登陆成功后需要保存用户登录信息，在首页展示
         /**
          * https://blog.csdn.net/qq_43371556/article/details/100862785
          * 分布式下web-server（tomcat）原生的session存在一下问题
@@ -81,8 +81,10 @@ public class LoginController {
          * 这个方法实现需要修改原生session的get和set方法，修改量大，所以这里可以引入springsession功能，
          * springsession实现了以上逻辑
          */
-        //开启了springsession后，原生session的set和get实际上已被重载??
-        session.setAttribute("userInfo",userLoginVo);
+        //开启了springsession后，原生session的set和get实际上已被重载
+
+        UserInfoVo userInfoVo = loginService.getUserInfo(userLoginVo);
+        session.setAttribute("userInfo",userInfoVo);
         return "redirect:http://shoppingmall.com";
     }
 }

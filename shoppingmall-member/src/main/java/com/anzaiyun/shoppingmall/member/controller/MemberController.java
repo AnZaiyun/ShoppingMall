@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.anzaiyun.common.errorenum.AuthServerExceptionInfoEnum;
+import com.anzaiyun.common.vo.UserInfoVo;
 import com.anzaiyun.shoppingmall.member.feign.coupon.CouponFeignService;
 import com.anzaiyun.shoppingmall.member.vo.UserLoginVo;
 import com.anzaiyun.shoppingmall.member.vo.UserRegistVo;
@@ -157,6 +158,19 @@ public class MemberController {
         Map<String,String> errors = memberService.checkLoginUser(userLoginVo);
 
         return errors;
+    }
+
+    /**
+     *
+     * @param userLoginVo
+     * @return
+     */
+    @RequestMapping("/getMemberByName")
+    public UserInfoVo getMemberByName(@RequestBody UserLoginVo userLoginVo){
+
+        UserInfoVo userInfoVo = memberService.getMemberByName(userLoginVo);
+
+        return userInfoVo;
     }
 
     @RequestMapping("/membercouponslist")

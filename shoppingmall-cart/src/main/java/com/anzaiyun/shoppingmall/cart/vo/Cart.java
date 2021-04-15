@@ -8,18 +8,22 @@ public class Cart {
      * 具体商品
      */
     private List<CartItem> cartItems;
+
     /**
      * 商品总数量
      */
     private Integer countNum;
+
     /**
      * 商品按类型区分的数量
      */
     private Integer countType;
+
     /**
      * 商品总价
      */
     private BigDecimal totalAmount;
+
     /**
      * 优惠减免金额
      */

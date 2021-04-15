@@ -1,5 +1,8 @@
 server:
   port: 17000
+  servlet:
+    session:
+      timeout: 10m
 
 spring:
   application:
@@ -16,6 +19,15 @@ spring:
   jackson:
     date-format: yyyy-MM-dd hh:mm:ss
     time-zone: GMT+8
+  redis:
+    host: 192.168.56.10
+    port: 6379
+  session:
+    store-type: redis
+    redis:
+      namespace: spring:session
+  thymeleaf:
+    cache: false
 
 management:
   endpoints:

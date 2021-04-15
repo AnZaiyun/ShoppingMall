@@ -8,6 +8,7 @@
     "product": 14000,
     "ware": 15000,
     "auth-serve": 16000,
+    "cart":17000,
     "third-part": 30000
   }
 }

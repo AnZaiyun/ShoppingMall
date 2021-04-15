@@ -1,0 +1,29 @@
+server:
+  port: 17000
+
+spring:
+  application:
+    name: shoppingmall-cart
+#  datasource:
+#    username: root
+#    password: root
+#    url: jdbc:mysql://192.168.56.10:3306/shoppingmall_sms?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+#    driver-class-name: com.mysql.jdbc.Driver
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+  jackson:
+    date-format: yyyy-MM-dd hh:mm:ss
+    time-zone: GMT+8
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+# 配置sql日志输出
+logging:
+  level:
+    com.anzaiyun.shoppingmall: debug

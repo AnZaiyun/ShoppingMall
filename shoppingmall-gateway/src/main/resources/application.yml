@@ -75,3 +75,8 @@ spring:
           uri: lb://shoppingmall-auth-server
           predicates:
             - Host=auth.shoppingmall.com
+
+        - id: cart_Nginx_route
+          uri: lb://shoppingmall-cart
+          predicates:
+            - Host=cart.shoppingmall.com

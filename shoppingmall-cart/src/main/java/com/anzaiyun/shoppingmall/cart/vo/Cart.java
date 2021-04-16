@@ -12,12 +12,12 @@ public class Cart {
     /**
      * 商品总数量
      */
-    private Integer countNum;
+    private Long countNum;
 
     /**
      * 商品按类型区分的数量
      */
-    private Integer countType;
+    private Long countType;
 
     /**
      * 商品总价
@@ -27,7 +27,7 @@ public class Cart {
     /**
      * 优惠减免金额
      */
-    private BigDecimal reduce;
+    private BigDecimal reduce=new BigDecimal(0);
 
     public List<CartItem> getCartItems() {
         return cartItems;
@@ -37,27 +37,27 @@ public class Cart {
         this.cartItems = cartItems;
     }
 
-    public Integer getCountNum() {
+    public Long getCountNum() {
         if(cartItems==null || cartItems.size()==0){
-            return 0;
+            return 0L;
         }
-        int count = 0;
+        Long count = 0L;
         for (CartItem cartItem : this.cartItems) {
             count = count + cartItem.getCount();
         }
         return count;
     }
 
-    public void setCountNum(Integer countNum) {
-        this.countNum = countNum;
+    public void setCountNum(Long countNum) {
+//        this.countNum = countNum;
     }
 
     public Integer getCountType() {
         return cartItems==null?0:cartItems.size();
     }
 
-    public void setCountType(Integer countType) {
-        this.countType = countType;
+    public void setCountType(Long countType) {
+//        this.countType = countType;
     }
 
     public BigDecimal getTotalAmount() {
@@ -72,7 +72,7 @@ public class Cart {
     }
 
     public void setTotalAmount(BigDecimal totalAmount) {
-        this.totalAmount = totalAmount;
+//        this.totalAmount = totalAmount;
     }
 
     public BigDecimal getReduce() {

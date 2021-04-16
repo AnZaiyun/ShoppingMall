@@ -26,7 +26,8 @@ public class CartController {
     public String cartList(Model model, HttpSession session){
         //判断当前用户是否登录，如果已登录，则将redis中的购物车数据和数据库中的购物车数据合并，如果没登录则只获取redis中的购物车数据
         //判断用户是否登录的逻辑抽取到拦截器中
-        UserStatus userStatus = CartInterceptor.threadLocal.get();
+
+        Cart cartlist = cartService.getCartList();
 
         return "cartList";
     }

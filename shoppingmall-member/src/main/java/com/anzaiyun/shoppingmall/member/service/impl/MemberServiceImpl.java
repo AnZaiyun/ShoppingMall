@@ -46,6 +46,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
     public void regist(UserRegistVo userRegistVo) {
         MemberEntity member = new MemberEntity();
         member.setUsername(userRegistVo.getUName());
+        member.setNickname(userRegistVo.getUName());
 
         /**
          * 这里密码不能直接保存明文，应该保存密文，加密方式md5（加盐方式）

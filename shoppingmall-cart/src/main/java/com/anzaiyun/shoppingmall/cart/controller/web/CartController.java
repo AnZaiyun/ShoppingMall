@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
+import java.util.concurrent.ExecutionException;
 
 @Controller
 @RequestMapping("/cart")
@@ -30,19 +31,13 @@ public class CartController {
         return "cartList";
     }
 
-    @RequestMapping("/success")
-    public String success(Model model){
-        String sessionId = (String) model.getAttribute("sessionId");
-        CartItem cartItem = new CartItem();
-        cartService.addCartItem(sessionId, cartItem);
-
-        return "success";
-    }
-
     @RequestMapping("/addToCart/{skuId}")
     public String addToCart(@RequestParam("skuId") Long skuId,
                             @RequestParam("num") Long num,
-                            Model model){
+                            Model model) throws ExecutionException, InterruptedException {
+
+        CartItem item = cartService.addToCart(skuId, num);
+        model.addAttribute("item", item);
 
         return "success";
     }

@@ -17,7 +17,7 @@ public class CartItem {
      */
     private List<String> skuAttr;
     private BigDecimal price;
-    private Integer count;
+    private Long count;
     private BigDecimal totalPrice;
 
     public Long getSkuId() {
@@ -68,11 +68,11 @@ public class CartItem {
         this.price = price;
     }
 
-    public Integer getCount() {
+    public Long getCount() {
         return count;
     }
 
-    public void setCount(Integer count) {
+    public void setCount(Long count) {
         this.count = count;
     }
 

@@ -3,15 +3,15 @@ package com.anzaiyun.shoppingmall.cart.service;
 import com.anzaiyun.shoppingmall.cart.vo.Cart;
 import com.anzaiyun.shoppingmall.cart.vo.CartItem;
 
+import java.util.concurrent.ExecutionException;
+
 public interface CartService {
+
     /**
-     * 通过唯一标识符sessionid来获取不同的购物车数据
-     * @param sessionId
+     * 将商品添加到购物车
+     * @param skuId
+     * @param num
      * @return
      */
-    Cart getCartByIdFromRedis(String sessionId);
-
-    Cart getCartByIdFromDB(String sessionId);
-
-    void addCartItem(String sessionId, CartItem cartItem);
+    CartItem addToCart(Long skuId, Long num) throws ExecutionException, InterruptedException;
 }

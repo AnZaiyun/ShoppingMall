@@ -19,5 +19,5 @@ public interface CartService {
      * 获取用户所有的购物车数据
      * @return
      */
-    Cart getCartList();
+    Cart getCartList() throws ExecutionException, InterruptedException;
 }

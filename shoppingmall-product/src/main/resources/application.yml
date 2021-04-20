@@ -26,6 +26,16 @@ spring:
   session:
     store-type: redis
 
+  rabbitmq:
+    password: guest
+    username: guest
+    port: 5672
+    host: 192.168.56.10
+    #确认消息已发送到交换机(Exchange)
+    publisher-confirm-type: correlated
+    #确认消息已发送到队列(Queue)
+    publisher-returns: true
+
 #    alicloud:
 #      access-key: LTAI4Fzqdnk1guSMpuokSQZ5
 #      secret-key: tDNe03mZBo8GjIA4ZDSHiGFoHntsay

@@ -9,7 +9,7 @@ public class CartItem {
     /**
      * 保存是否被勾选
      */
-    private Boolean check = true;
+    private int isChecked = 0;
     private String title;
     private String image;
     /**
@@ -28,12 +28,12 @@ public class CartItem {
         this.skuId = skuId;
     }
 
-    public Boolean getCheck() {
-        return check;
+    public int getCheck() {
+        return isChecked;
     }
 
-    public void setCheck(Boolean check) {
-        this.check = check;
+    public void setCheck(int isChecked) {
+        this.isChecked = isChecked;
     }
 
     public String getTitle() {

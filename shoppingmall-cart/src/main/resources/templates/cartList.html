@@ -78,8 +78,8 @@
         </div>
 
         <div class="One_ShopCon">
-            <ul>
-                <li th:each="cartInfo:${cartList}">
+            <ul >
+                <li th:each="cartInfo:${cartList.cartItems}">
                     <div></div>
 
                     <div>
@@ -88,20 +88,20 @@
                                        onchange="checkSku(this)"
                                        th:checked="(${cartInfo.isChecked}==1)?'true':'false'"/></li>
                             <li>
-                                <dt><img th:src="${cartInfo.imgUrl}" src="/static/cart/img/shop1.jpg" alt=""></dt>
+                                <dt><img th:src="${cartInfo.image}" src="/static/cart/img/shop1.jpg" alt=""></dt>
                                 <dd th:onclick="'toItem('+${cartInfo.skuId}+')'">
                                     <p>
-                                        <span th:text="${cartInfo.skuName}">TCL 55A950C 55英寸32核</span>
+                                        <span th:text="${cartInfo.title}">TCL 55A950C 55英寸32核</span>
                                     </p>
                                 </dd>
                             </li>
                             <li>
-                                <p class="dj" th:text="'￥'+${cartInfo.skuPrice}">4599.00</p>
+                                <p class="dj" th:text="'￥'+${cartInfo.price}">4599.00</p>
                             </li>
                             <li>
                                 <p>
                                     <span>-</span>
-                                    <span th:text="${cartInfo.skuNum}">5</span>
+                                    <span th:text="${cartInfo.count}">5</span>
                                     <span>+</span>
                                 </p>
                             </li>

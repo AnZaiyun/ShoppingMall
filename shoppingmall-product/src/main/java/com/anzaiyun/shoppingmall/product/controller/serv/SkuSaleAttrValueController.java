@@ -89,7 +89,7 @@ public class SkuSaleAttrValueController {
     }
 
     @RequestMapping("/getSaleAttrAsStringList")
-    public List<String> getSaleAttrAsStringList(Long skuId){
+    public List<String> getSaleAttrAsStringList(@RequestParam("skuId") Long skuId){
         List<String> saleAttrs = skuSaleAttrValueService.getSaleAttrAsStringList(skuId);
 
         return saleAttrs;

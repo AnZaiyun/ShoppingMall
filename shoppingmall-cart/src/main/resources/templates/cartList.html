@@ -84,8 +84,9 @@
 
                     <div>
                         <ol>
-                            <li><input type="checkbox" class="check" th:value="${cartInfo.skuId}"
+                            <li><input type="checkbox" class="itemCheck" th:value="${cartInfo.skuId}"
                                        onchange="checkSku(this)"
+                                       th:attr="skuId=${cartInfo.skuId}"
                                        th:checked="(${cartInfo.isChecked}==1)?'true':'false'"/></li>
                             <li>
                                 <dt><img th:src="${cartInfo.image}" src="/static/cart/img/shop1.jpg" alt=""></dt>
@@ -99,10 +100,10 @@
                                 <p class="dj" th:text="'￥'+${cartInfo.price}">4599.00</p>
                             </li>
                             <li>
-                                <p>
-                                    <span>-</span>
-                                    <span th:text="${cartInfo.count}">5</span>
-                                    <span>+</span>
+                                <p th:attr="skuId=${cartInfo.skuId}">
+                                    <span class="countCartItemBtn">-</span>
+                                    <span class="countCartItemNumBtn" th:text="${cartInfo.count}">5</span>
+                                    <span class="countCartItemBtn">+</span>
                                 </p>
                             </li>
                             <li style="font-weight:bold">
@@ -174,7 +175,7 @@
             </div>
             <div>
                 <ol>
-                    <li>总价:<span style="color:#e64346;font-weight:bold;font-size:16px;" class="fnt">￥0.00</span></li>
+                    <li>总价:<span style="color:#e64346;font-weight:bold;font-size:16px;" class="fnt" >￥0.00</span></li>
 
                 </ol>
             </div>
@@ -261,7 +262,7 @@
     }
 
     function checkSku(chkbox) {
-        var skuId = $(chkbox).attr("value");
+        var skuId = $(chkbox).attr("skuId");
         var checked = $(chkbox).prop("checked");
         var isCheckedFlag = "0";
         if (checked) {
@@ -597,8 +598,8 @@
 
     })
     //选中当前商品背景变色
-    $(".check").each(function (index) {
-        $(".check").eq(index).click(function () {
+    $(".itemCheck").each(function (index) {
+        $(".itemCheck").eq(index).click(function () {
             if ($(this).is(":checked")) {
                 $(this).parent().parent().parent().css("background", "#fff4e8");
                 $(this).parent().parent().parent().parent().children("div:last-child").css("background", "#fff4e8")
@@ -792,6 +793,13 @@
         $(this).children("p").children("img").attr("src", "/static/cart/img/one_mian_gwc2.png")
     }).mouseout(function () {
         $(this).children("p").children("img").attr("src", "/static/cart/img/one_mian_gwc1.png")
+    })
+
+    $(".countCartItemBtn").click(function () {
+        let skuId = $(this).parent().attr("skuId");
+        let text = $(this).parent().find(".countCartItemNumBtn").text();
+        // alert(text);
+        location.href = "http://cart.shoppingmall.com/cart/updateItemCount?skuId="+skuId+"&count="+text;
     })
 </script>
 </html>

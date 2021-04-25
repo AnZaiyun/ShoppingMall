@@ -59,7 +59,7 @@ public class SkuInfoController {
      * 信息
      */
     @RequestMapping("/getInfo")
-    public SkuInfoEntity getInfo(Long skuId){
+    public SkuInfoEntity getInfo(@RequestParam("skuId") Long skuId){
         SkuInfoEntity skuInfo = skuInfoService.getById(skuId);
 
         return skuInfo;

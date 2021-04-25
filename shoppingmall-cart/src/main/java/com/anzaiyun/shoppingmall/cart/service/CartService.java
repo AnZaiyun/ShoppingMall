@@ -20,4 +20,15 @@ public interface CartService {
      * @return
      */
     Cart getCartList() throws ExecutionException, InterruptedException;
+
+    CartItem getCartItem(Long skuId);
+
+    /**
+     * 勾选购物项
+     * @param skuId
+     * @param isChecked
+     */
+    void checkCart(Long skuId, Long isChecked);
+
+    void updateItemCount(Long skuId, Long count);
 }

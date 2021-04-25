@@ -48,7 +48,7 @@ public class CartServiceImpl implements CartService {
             }
         }
 
-        if (item!=null){
+        if (item.getSkuId()!=null){
             // 当前购物车中已经存在该商品信息
             item.setCount(item.getCount() + num);
         }
@@ -77,7 +77,8 @@ public class CartServiceImpl implements CartService {
             item = finalItem;
         }
 
-        ops.put(skuId,item);
+        String s = JSON.toJSONString(item);
+        ops.put(skuId.toString(),s);
 
         return item;
     }
@@ -179,5 +180,29 @@ public class CartServiceImpl implements CartService {
         }
 
         return redisTemplate.boundHashOps(cartKey);
+    }
+
+    @Override
+    public CartItem getCartItem(Long skuId) {
+        BoundHashOperations<String, Object, Object> ops = getStringObjectObjectBoundHashOperations();
+        String s = (String) ops.get(skuId.toString());
+        CartItem cartItem = JSON.parseObject(s, CartItem.class);
+        return cartItem;
+    }
+
+    @Override
+    public void checkCart(Long skuId, Long isChecked) {
+        CartItem cartItem = getCartItem(skuId);
+        cartItem.setIsChecked(Math.toIntExact(isChecked));
+        BoundHashOperations<String, Object, Object> ops = getStringObjectObjectBoundHashOperations();
+        ops.put(skuId.toString(),JSON.toJSONString(cartItem));
+    }
+
+    @Override
+    public void updateItemCount(Long skuId, Long count) {
+        CartItem cartItem = getCartItem(skuId);
+        cartItem.setCount(count);
+        BoundHashOperations<String, Object, Object> ops = getStringObjectObjectBoundHashOperations();
+        ops.put(skuId.toString(),JSON.toJSONString(cartItem));
     }
 }

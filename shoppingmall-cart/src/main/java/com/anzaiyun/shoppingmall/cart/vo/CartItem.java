@@ -1,5 +1,7 @@
 package com.anzaiyun.shoppingmall.cart.vo;
 
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -28,11 +30,11 @@ public class CartItem {
         this.skuId = skuId;
     }
 
-    public int getCheck() {
+    public int getIsChecked() {
         return isChecked;
     }
 
-    public void setCheck(int isChecked) {
+    public void setIsChecked(int isChecked) {
         this.isChecked = isChecked;
     }
 
@@ -87,4 +89,5 @@ public class CartItem {
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
     }
+
 }
